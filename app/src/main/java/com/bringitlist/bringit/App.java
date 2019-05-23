@@ -3,7 +3,7 @@ package com.bringitlist.bringit;
 import android.app.Application;
 //esta classe serve para poder ter objetos nas várias atividades
 //é criado um objeto desta classe quando a aplicação é aberta
-//para o pegarmos faz-se:
+//para o pegarmos em qualquer atividade ou serviço faz-se:
 //App app = (App) getApplication();
 //App- nome da classe
 //app- nome da variavel
