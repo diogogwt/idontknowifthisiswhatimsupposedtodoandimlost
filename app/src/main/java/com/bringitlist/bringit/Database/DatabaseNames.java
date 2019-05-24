@@ -22,9 +22,12 @@ public class DatabaseNames {
                     ");" +
                     "create table " + TABLE_PRODUCTS + "(" +
                     COLUMN_ID + " integer primary key," +
+                    COLUMN_CAT_ID + " integer" +
                     COLUMN_NAME + " text" +
                     COLUMN_IMAGE + " text" +
-                    COLUMN_CAT_ID + " integer" +
                     "foreign key(" + COLUMN_CAT_ID + ") references " + TABLE_CATEGORIES + "(" + COLUMN_ID + ")" +
                     ")";
+
+    public static final String INSERT_CATEGORY = "insert into " + TABLE_CATEGORIES + "values(?,?)";
+    public static final String INSERT_PRODUCT = "insert into " + TABLE_PRODUCTS + "values(?,?,?,?)";
 }

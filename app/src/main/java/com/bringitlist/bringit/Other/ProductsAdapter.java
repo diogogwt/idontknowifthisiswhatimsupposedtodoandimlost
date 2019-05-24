@@ -3,7 +3,6 @@ package com.bringitlist.bringit.Other;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +13,6 @@ import android.widget.TextView;
 import com.bringitlist.bringit.Database.DatabaseNames;
 import com.bringitlist.bringit.Database.DatabaseOpen;
 import com.bringitlist.bringit.R;
-
-import java.sql.DatabaseMetaData;
 
 public class ProductsAdapter extends BaseAdapter {
 

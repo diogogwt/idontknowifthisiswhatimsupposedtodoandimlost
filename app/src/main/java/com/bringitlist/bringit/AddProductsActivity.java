@@ -19,8 +19,6 @@ public class AddProductsActivity extends AppCompatActivity {
         adapter = new ProductsAdapter(this);
 
         gridView = findViewById(R.id.add_products_grid_view);
-
-
         gridView.setAdapter(adapter);
 
 
