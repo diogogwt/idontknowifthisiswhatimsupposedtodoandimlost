@@ -32,25 +32,24 @@ public class App extends Application {
                 DatabaseOpen dbOpen = new DatabaseOpen(getApplicationContext());
                 SQLiteDatabase db = dbOpen.getWritableDatabase();
 
-                Context context = getApplicationContext();
                 String line;
+                BufferedReader br;
 
-                BufferedReader br = new BufferedReader(new InputStreamReader(context.openFileInput("categories.txt")));
+                br = new BufferedReader(new InputStreamReader(getAssets().open("categories.txt")));
                 while ((line = br.readLine()) != null) {
 
                     String[] splittedLine = line.split(";");
                     db.execSQL(DatabaseNames.INSERT_CATEGORY, splittedLine);
                 }
 
-                br = new BufferedReader(new InputStreamReader(context.openFileInput("products.txt")));
+                br = new BufferedReader(new InputStreamReader(getAssets().open("products.txt")));
                 for (int i = 0; (line = br.readLine()) != null; i++) {
 
                     String[] splittedLine = line.split(";");
                     String[] allValues = new String[splittedLine.length + 1];
                     allValues[0] = "" + i;
-                    for (int j = 0; j < splittedLine.length; j++) {
-                        allValues[j + 1] = splittedLine[j];
-                    }
+                    System.arraycopy(splittedLine, 0, allValues, 1, splittedLine.length);
+
                     db.execSQL(DatabaseNames.INSERT_PRODUCT, allValues);
                 }
             } catch (IOException e) {
