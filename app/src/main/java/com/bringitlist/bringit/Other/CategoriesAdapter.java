@@ -19,35 +19,32 @@ import com.bringitlist.bringit.R;
 
 import java.util.Arrays;
 
-public class ProductsAdapter extends BaseAdapter {
+public class CategoriesAdapter extends BaseAdapter {
 
-    private static String TAG = "ProductsAdapter";
 
     private Context context;
     private DatabaseOpen dbOpen;
     private SQLiteDatabase db;
     private int[] ids;
 
-    //para selecionar categorias receber um array com os ids ou nomes
-    public ProductsAdapter(Context context) {
+    public CategoriesAdapter(Context context) {
         this.context = context;
         this.dbOpen = new DatabaseOpen(context);
         this.db = dbOpen.getReadableDatabase();
 
         SQLiteDatabase db = dbOpen.getReadableDatabase();
-        Cursor cursor = db.rawQuery("select count(id) from " + DBNames.PRODUCTS + ";", null);
+        Cursor cursor = db.rawQuery("select count(id) from " + DBNames.CATEGORIES + ";", null);
         cursor.moveToFirst();
         int count = cursor.getInt(0);
         cursor.close();
         ids = new int[count];
 
-        cursor = db.rawQuery("select id from " + DBNames.PRODUCTS + " order by name;", null);
+        cursor = db.rawQuery("select id from " + DBNames.CATEGORIES + " order by name;", null);
         cursor.moveToFirst();
         for (int i = 0; cursor.moveToNext(); i++) {
             ids[i] = cursor.getInt(0);
         }
         cursor.close();
-        Log.i(TAG, Arrays.toString(ids));
     }
 
     @Override
@@ -69,25 +66,18 @@ public class ProductsAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         String[] selectionArgs = {String.valueOf(getItemId(position))};
-        Cursor cursor = db.query(DBNames.PRODUCTS, new String[]{"name", "image"}, "id=?", selectionArgs, null, null, null);
+        Cursor cursor = db.query(DBNames.PRODUCTS, new String[]{"name"}, "id=?", selectionArgs, null, null, null);
         cursor.moveToFirst();
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.product_layout, parent, false);
+            convertView = inflater.inflate(R.layout.row_cat_checkbox, parent, false);
         }
 
-        TextView nameView = convertView.findViewById(R.id.product_name);
-        ImageView imageView = convertView.findViewById(R.id.product_image);
+        TextView textView = convertView.findViewById(R.id.row_cat_textview);
+        textView.setText(cursor.getString(0));
 
-        nameView.setText(cursor.getString(0));
-        try {
-            String fileName = cursor.getString(1);
-            Bitmap bitmap = BitmapFactory.decodeStream(context.getResources().getAssets().open(fileName));
-            imageView.setImageBitmap(bitmap);
-        } catch (Exception e) {
-            Log.e("BIG OPPSIE", "putting image on grid element: ", e);
-        }
+
         cursor.close();
 
         return convertView;
