@@ -25,6 +25,6 @@ public class DatabaseNames {
                     COLUMN_NAME + " text" +
                     COLUMN_IMAGE + " text" +
                     COLUMN_CAT_ID + " integer" +
-                    "foreign key(" + COLUMN_CAT_ID + ") regerences " + TABLE_CATEGORIES + "(" + COLUMN_ID + ")" +
+                    "foreign key(" + COLUMN_CAT_ID + ") references " + TABLE_CATEGORIES + "(" + COLUMN_ID + ")" +
                     ")";
 }
