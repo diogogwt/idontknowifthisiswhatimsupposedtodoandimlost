@@ -1,0 +1,4 @@
+1;CocaCola;cocacola.jpg
+1;Pepsi;isded.jpg
+1;Ice Tea Limão;lipton.jpg
+1;Fanta;fanta.jpg

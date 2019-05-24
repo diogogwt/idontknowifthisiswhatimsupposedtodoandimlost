@@ -1,12 +1,10 @@
 package com.bringitlist.bringit.Database;
 
 // esta class serve para ter as cenas ja definidas e nao me enganar ao longo das varias vezes que vou escrever esses valores
-public class DatabaseNames {
+public class DBNames {
 
-    private DatabaseNames() {
+    private DBNames() {
     }
-
-    public static final String COLUMN_ID = "id";
 
     public static final String PRODUCTS = "products";
     public static final String CATEGORIES = "categories";

@@ -5,12 +5,13 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.bringitlist.bringit.Database.DatabaseNames;
+import com.bringitlist.bringit.Database.DBNames;
 import com.bringitlist.bringit.Database.DatabaseOpen;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 //esta classe serve para poder ter objetos nas várias atividades
 //é criado um objeto desta classe quando a aplicação é aberta
@@ -38,9 +39,9 @@ public class App extends Application {
                 br = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.categories)));
                 while ((line = br.readLine()) != null) {
 
-                    Log.d(TAG, "DoOnFirstOpening: ");
                     String[] splittedLine = line.split(";");
-                    db.execSQL(DatabaseNames.INSERT_CATEGORY, splittedLine);
+                    Log.d(TAG, Arrays.toString(splittedLine));
+                    db.execSQL(DBNames.INSERT_CATEGORY, splittedLine);
                 }
 
                 br = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.products)));
@@ -50,9 +51,11 @@ public class App extends Application {
                     String[] allValues = new String[splittedLine.length + 1];
                     allValues[0] = "" + i;
                     System.arraycopy(splittedLine, 0, allValues, 1, splittedLine.length);
-                    allValues[allValues.length - 1] = "prod_img" + allValues[allValues.length - 1];
+                    allValues[allValues.length - 1] = "prod_img/" + allValues[allValues.length - 1];
 
-                    db.execSQL(DatabaseNames.INSERT_PRODUCT, allValues);
+                    Log.i(TAG, Arrays.toString(allValues));
+
+                    db.execSQL(DBNames.INSERT_PRODUCT, allValues);
                 }
             } catch (IOException e) {
                 Log.e("BIG OPPSIE", "Filling Database: ", e);
@@ -70,7 +73,7 @@ public class App extends Application {
             editor.putBoolean("firstTime", false);
             editor.apply();
         }
-        //return firstTime;
-        return true;
+        return firstTime;
+        //return true;
     }
 }
