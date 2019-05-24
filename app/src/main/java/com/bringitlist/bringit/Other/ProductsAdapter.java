@@ -3,6 +3,9 @@ package com.bringitlist.bringit.Other;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +33,7 @@ public class ProductsAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         SQLiteDatabase db = dbOpen.getReadableDatabase();
-        Cursor cursor = db.rawQuery("select count(id) from produtcs;", null);
+        Cursor cursor = db.rawQuery("select count(id) from " + DatabaseNames.PRODUCTS + ";", null);
         cursor.moveToFirst();
         int count = cursor.getInt(0);
         cursor.close();
@@ -56,17 +59,21 @@ public class ProductsAdapter extends BaseAdapter {
         }
 
         String[] selectionArgs = {String.valueOf(getItemId(position))};
-        Cursor cursor = db.query(DatabaseNames.TABLE_PRODUCTS, null, "id=?", selectionArgs, null, null, null);
+        Cursor cursor = db.query(DatabaseNames.PRODUCTS, null, "id=?", selectionArgs, null, null, null);
 
         TextView nameView = convertView.findViewById(R.id.product_name);
         ImageView imageView = convertView.findViewById(R.id.product_image);
 
 
-        nameView.setText(cursor.getString(cursor.getColumnIndex(DatabaseNames.COLUMN_NAME)));
+        nameView.setText(cursor.getString(cursor.getColumnIndex("name")));
 
-        String resourceName = cursor.getString(cursor.getColumnIndex(DatabaseNames.COLUMN_NAME));
-        int resourceId = context.getResources().getIdentifier(resourceName, "drawable", context.getPackageName());
-        imageView.setImageResource(resourceId);
+        try {
+            String fileName = cursor.getString(cursor.getColumnIndex("image"));
+            Bitmap bitmap = BitmapFactory.decodeStream(context.getResources().getAssets().open(fileName));
+            imageView.setImageBitmap(bitmap);
+        } catch (Exception e) {
+            Log.e("BIG OPPSIE", "putting image on grid element: ", e);
+        }
 
         cursor.close();
 

@@ -8,26 +8,19 @@ public class DatabaseNames {
 
     public static final String COLUMN_ID = "id";
 
-    public static final String TABLE_PRODUCTS = "products";
-    public static final String TABLE_CATEGORIES = "categories";
+    public static final String PRODUCTS = "products";
+    public static final String CATEGORIES = "categories";
 
-    public static final String COLUMN_CAT_ID = "id_cat";
-    public static final String COLUMN_NAME = "name";
-    public static final String COLUMN_IMAGE = "image";
-
-    public static final String CREATE_TABLES =
-            "create table " + TABLE_CATEGORIES + "(" +
-                    COLUMN_ID + " integer primary key" +
-                    COLUMN_NAME + " text" +
-                    ");" +
-                    "create table " + TABLE_PRODUCTS + "(" +
-                    COLUMN_ID + " integer primary key," +
-                    COLUMN_CAT_ID + " integer" +
-                    COLUMN_NAME + " text" +
-                    COLUMN_IMAGE + " text" +
-                    "foreign key(" + COLUMN_CAT_ID + ") references " + TABLE_CATEGORIES + "(" + COLUMN_ID + ")" +
+    public static final String CREATE_TABLE_CATEGORIES = "create table " + CATEGORIES + " (id integer primary key,name text);";
+    public static final String CREATE_TABLE_PRODUCTS =
+            "create table " + PRODUCTS + " (" +
+                    "id integer primary key," +
+                    "cat_id integer," +
+                    "name text," +
+                    "image text," +
+                    "foreign key(cat_id) references " + CATEGORIES + "(id)" +
                     ")";
 
-    public static final String INSERT_CATEGORY = "insert into " + TABLE_CATEGORIES + "values(?,?)";
-    public static final String INSERT_PRODUCT = "insert into " + TABLE_PRODUCTS + "values(?,?,?,?)";
+    public static final String INSERT_CATEGORY = "insert into " + CATEGORIES + " values(?,?);";
+    public static final String INSERT_PRODUCT = "insert into " + PRODUCTS + " values(?,?,?,?);";
 }
