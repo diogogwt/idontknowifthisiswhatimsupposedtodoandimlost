@@ -1,17 +1,21 @@
 package com.bringitlist.bringit;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridView;
 
+import com.bringitlist.bringit.Database.DBNames;
+import com.bringitlist.bringit.Database.DatabaseOpen;
+import com.bringitlist.bringit.Other.IdAndChecked;
 import com.bringitlist.bringit.Other.UserListAdapter;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,12 +35,29 @@ public class MainActivity extends AppCompatActivity {
         app.RetrieveAll();
 
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.add_prod_main);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AddProductsActivity.class);
                 startActivity(intent);
+            }
+        });
+        fab = findViewById(R.id.cart_prod_main);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SQLiteDatabase db = new DatabaseOpen(MainActivity.this).getWritableDatabase();
+                ArrayList<IdAndChecked> temp = (ArrayList<IdAndChecked>) app.userItems.clone();
+
+                for (IdAndChecked item : temp) {
+                    if (item.checked) {
+                        app.userItems.remove(item);
+
+                        db.execSQL(DBNames.INSERT_HISTORY, new Integer[]{item.id});
+                    }
+                }
+                listAdapter.notifyDataSetChanged();
             }
         });
 
@@ -50,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         listAdapter.notifyDataSetChanged();
+
+        app.printSelect("select * from history", null);
     }
 
     @Override

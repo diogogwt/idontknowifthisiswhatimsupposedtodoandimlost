@@ -2,12 +2,14 @@ package com.bringitlist.bringit;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.bringitlist.bringit.Database.DBNames;
 import com.bringitlist.bringit.Database.DatabaseOpen;
+import com.bringitlist.bringit.Other.IdAndChecked;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,7 +28,7 @@ import java.util.Arrays;
 public class App extends Application {
 
     private static String TAG = "App";
-    public ArrayList<Long> userItems = null;
+    public ArrayList<IdAndChecked> userItems = null;
 
     public App() {
     }
@@ -95,13 +97,38 @@ public class App extends Application {
     public void RetrieveAll() {
         try {
             ObjectInputStream oos = new ObjectInputStream(openFileInput("user_list"));
-            userItems = (ArrayList<Long>) oos.readObject();
+            userItems = (ArrayList<IdAndChecked>) oos.readObject();
             oos.close();
         } catch (Exception ex) {
             userItems = new ArrayList<>();
         }
+    }
 
+    public SQLiteDatabase getReadableDB() {
+        return new DatabaseOpen(getApplicationContext()).getReadableDatabase();
     }
 
 
+    public void printSelect(String query, String[] selectionArgs) {
+
+        Cursor cursor = getReadableDB().rawQuery(query, selectionArgs);
+        cursor.moveToFirst();
+        StringBuilder strBuilder = new StringBuilder(".\n");
+
+        String[] collumnNames = cursor.getColumnNames();
+
+        for (int i = 0; i < collumnNames.length; i++)
+            strBuilder.append(collumnNames[i]).append(",\t");
+
+        strBuilder.append("\n");
+        do {
+            for (int i = 0; i < cursor.getColumnCount() - 1; i++)
+                strBuilder.append(cursor.getString(i)).append(",\t");
+
+            strBuilder.append(cursor.getString(cursor.getColumnCount() - 1));
+            strBuilder.append("\n");
+        } while (cursor.moveToNext());
+        cursor.close();
+        Log.i("Cursor Result", strBuilder.toString());
+    }
 }

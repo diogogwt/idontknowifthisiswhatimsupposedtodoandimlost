@@ -17,6 +17,7 @@ public class DatabaseOpen extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DBNames.CREATE_TABLE_CATEGORIES);
         db.execSQL(DBNames.CREATE_TABLE_PRODUCTS);
+        db.execSQL(DBNames.CREATE_TABLE_HISTORY);
     }
 
     @Override

@@ -80,6 +80,7 @@ public class ProductsAdapter extends BaseAdapter {
         return ids[position];
     }
 
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
@@ -108,7 +109,10 @@ public class ProductsAdapter extends BaseAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                app.userItems.add(getItemId(position));
+                IdAndChecked das = new IdAndChecked();
+                das.id = ids[position];
+                das.checked = false;
+                app.userItems.add(das);
                 ((Activity) context).finish();
             }
         });

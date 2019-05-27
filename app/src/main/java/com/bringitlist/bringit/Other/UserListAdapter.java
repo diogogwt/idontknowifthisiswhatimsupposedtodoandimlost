@@ -1,11 +1,14 @@
 package com.bringitlist.bringit.Other;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,19 +26,19 @@ import java.util.ArrayList;
 
 public class UserListAdapter extends BaseAdapter {
 
-    private Context context;
-    private ArrayList<Long> ids;
+    public Context context;
     private SQLiteDatabase db;
+    private ArrayList<IdAndChecked> items;
 
     public UserListAdapter(Context context) {
         this.context = context;
-        this.ids = ((App) context.getApplicationContext()).userItems;
+        this.items = ((App) context.getApplicationContext()).userItems;
         this.db = new DatabaseOpen(context).getReadableDatabase();
     }
 
     @Override
     public int getCount() {
-        return ids.size();
+        return items.size();
     }
 
     @Override
@@ -45,12 +48,11 @@ public class UserListAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return ids.get(position);
+        return items.get(position).id;
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-
 
         String[] selectionArgs = new String[]{String.valueOf(getItemId(position))};
         Cursor cursor = db.query(DBNames.PRODUCTS, new String[]{"name", "image"}, "id=?", selectionArgs, null, null, null);
@@ -76,12 +78,35 @@ public class UserListAdapter extends BaseAdapter {
         }
         cursor.close();
 
+        /**---------------------------------------------------------------------*/
+        final View view = convertView;
+
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                ids.remove(position);
-                notifyDataSetChanged();
+                AlertDialog dialog = new AlertDialog.Builder(context)
+                        .setTitle("Tens a certeza que desejas remover da lista?")
+                        .setNegativeButton("Nãoe", null)
+                        .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                items.remove(position);
+                                notifyDataSetChanged();
+                            }
+                        })
+                        .create();
+                dialog.show();
                 return true;
+            }
+        });
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                items.get(position).reverse();
+                if (items.get(position).checked)
+                    view.setBackgroundColor(Color.GRAY);
+                else
+                    view.setBackgroundColor(Color.WHITE);
             }
         });
 
