@@ -73,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
         listAdapter.notifyDataSetChanged();
 
         app.printSelect("select * from history", null);
+        app.printSelect("select * from categories", null);
+        app.printSelect("select * from products", null);
     }
 
     @Override

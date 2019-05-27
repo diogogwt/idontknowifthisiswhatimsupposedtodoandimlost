@@ -60,13 +60,12 @@ public class AddProductsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_add_product, menu);
+        getMenuInflater().inflate(R.menu.menu_add_product, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_prod_select_cat:
 
