@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.bringitlist.bringit.Database.DBNames;
 import com.bringitlist.bringit.Database.DatabaseOpen;
@@ -11,6 +12,9 @@ import com.bringitlist.bringit.Database.DatabaseOpen;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 //esta classe serve para poder ter objetos nas várias atividades
@@ -22,9 +26,9 @@ import java.util.Arrays;
 public class App extends Application {
 
     private static String TAG = "App";
+    public ArrayList<Long> userItems = null;
 
     public App() {
-
     }
 
     public void DoOnFirstOpening() {
@@ -76,4 +80,28 @@ public class App extends Application {
         return firstTime;
         //return true;
     }
+
+
+    public void SaveAll() {
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("user_list", MODE_PRIVATE));
+            oos.writeObject(userItems);
+            oos.close();
+        } catch (IOException e) {
+            Log.e("Error", "Save user list: ", e);
+        }
+    }
+
+    public void RetrieveAll() {
+        try {
+            ObjectInputStream oos = new ObjectInputStream(openFileInput("user_list"));
+            userItems = (ArrayList<Long>) oos.readObject();
+            oos.close();
+        } catch (Exception ex) {
+            userItems = new ArrayList<>();
+        }
+
+    }
+
+
 }

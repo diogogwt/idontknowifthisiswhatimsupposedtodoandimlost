@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,54 +19,23 @@ import com.bringitlist.bringit.Database.DBNames;
 import com.bringitlist.bringit.Database.DatabaseOpen;
 import com.bringitlist.bringit.R;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
-public class ProductsAdapter extends BaseAdapter {
-
-    private static String TAG = "ProductsAdapter";
+public class UserListAdapter extends BaseAdapter {
 
     private Context context;
-    private App app;
-    private DatabaseOpen dbOpen;
+    private ArrayList<Long> ids;
     private SQLiteDatabase db;
-    private int[] ids;
 
-    //para selecionar categorias receber um array com os ids ou nomes
-    public ProductsAdapter(Context context, Integer[] where) {
+    public UserListAdapter(Context context) {
         this.context = context;
-        this.app = (App) context.getApplicationContext();
-        this.dbOpen = new DatabaseOpen(context);
-        this.db = dbOpen.getReadableDatabase();
-
-        SQLiteDatabase db = dbOpen.getReadableDatabase();
-        if (where == null) {
-
-            Cursor cursor = db.rawQuery("select id from " + DBNames.PRODUCTS + " order by name;", null);
-            ids = new int[cursor.getCount()];
-
-            cursor.moveToFirst();
-            for (int i = 0; cursor.moveToNext(); i++) {
-                ids[i] = cursor.getInt(0);
-            }
-            cursor.close();
-        } else {
-            String whereString = TextUtils.join(",", where);
-
-            Cursor cursor = db.rawQuery("select id from " + DBNames.PRODUCTS + " where cat_id in (" + whereString + ") order by name;", null);
-            ids = new int[cursor.getCount()];
-            cursor.moveToFirst();
-            for (int i = 0; cursor.moveToNext(); i++) {
-                ids[i] = cursor.getInt(0);
-            }
-            cursor.close();
-        }
-
-        Log.i(TAG, Arrays.toString(ids));
+        this.ids = ((App) context.getApplicationContext()).userItems;
+        this.db = new DatabaseOpen(context).getReadableDatabase();
     }
 
     @Override
     public int getCount() {
-        return ids.length;
+        return ids.size();
     }
 
     @Override
@@ -77,15 +45,18 @@ public class ProductsAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return ids[position];
+        return ids.get(position);
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        String[] selectionArgs = {String.valueOf(getItemId(position))};
+
+        String[] selectionArgs = new String[]{String.valueOf(getItemId(position))};
         Cursor cursor = db.query(DBNames.PRODUCTS, new String[]{"name", "image"}, "id=?", selectionArgs, null, null, null);
-        cursor.moveToFirst();
+        if (!cursor.moveToFirst()) {
+            return null;
+        }
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -105,14 +76,14 @@ public class ProductsAdapter extends BaseAdapter {
         }
         cursor.close();
 
-        convertView.setOnClickListener(new View.OnClickListener() {
+        convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                app.userItems.add(getItemId(position));
-                ((Activity) context).finish();
+            public boolean onLongClick(View v) {
+                ids.remove(position);
+                notifyDataSetChanged();
+                return true;
             }
         });
-
 
         return convertView;
     }

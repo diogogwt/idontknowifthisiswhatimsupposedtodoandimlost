@@ -3,53 +3,34 @@ package com.bringitlist.bringit.Other;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.bringitlist.bringit.Database.DBNames;
 import com.bringitlist.bringit.Database.DatabaseOpen;
 import com.bringitlist.bringit.R;
 
-import java.util.Arrays;
-
 public class CategoriesAdapter extends BaseAdapter {
 
 
     private Context context;
-    private DatabaseOpen dbOpen;
     private SQLiteDatabase db;
-    private int[] ids;
+    private IdAndChecked[] items;
 
-    public CategoriesAdapter(Context context) {
+
+    public CategoriesAdapter(Context context, IdAndChecked[] items) {
         this.context = context;
-        this.dbOpen = new DatabaseOpen(context);
-        this.db = dbOpen.getReadableDatabase();
-
-        SQLiteDatabase db = dbOpen.getReadableDatabase();
-        Cursor cursor = db.rawQuery("select count(id) from " + DBNames.CATEGORIES + ";", null);
-        cursor.moveToFirst();
-        int count = cursor.getInt(0);
-        cursor.close();
-        ids = new int[count];
-
-        cursor = db.rawQuery("select id from " + DBNames.CATEGORIES + " order by name;", null);
-        cursor.moveToFirst();
-        for (int i = 0; cursor.moveToNext(); i++) {
-            ids[i] = cursor.getInt(0);
-        }
-        cursor.close();
+        this.db = new DatabaseOpen(context).getReadableDatabase();
+        this.items = items;
     }
 
     @Override
     public int getCount() {
-        return ids.length;
+        return items.length;
     }
 
     @Override
@@ -59,14 +40,14 @@ public class CategoriesAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return ids[position];
+        return items[position].id;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         String[] selectionArgs = {String.valueOf(getItemId(position))};
-        Cursor cursor = db.query(DBNames.PRODUCTS, new String[]{"name"}, "id=?", selectionArgs, null, null, null);
+        Cursor cursor = db.query(DBNames.CATEGORIES, new String[]{"name"}, "id=?", selectionArgs, null, null, null);
         cursor.moveToFirst();
 
         if (convertView == null) {
@@ -74,12 +55,21 @@ public class CategoriesAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.row_cat_checkbox, parent, false);
         }
 
+        final CheckBox checkBox = convertView.findViewById(R.id.row_cat_checkbox);
+        checkBox.setChecked(items[position].checked);
         TextView textView = convertView.findViewById(R.id.row_cat_textview);
         textView.setText(cursor.getString(0));
 
-
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkBox.setChecked(!checkBox.isChecked());
+                items[position].checked = checkBox.isChecked();
+            }
+        });
         cursor.close();
 
         return convertView;
     }
 }
+

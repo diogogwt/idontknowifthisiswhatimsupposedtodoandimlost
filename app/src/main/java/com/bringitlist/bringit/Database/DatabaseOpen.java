@@ -15,8 +15,6 @@ public class DatabaseOpen extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        /*db.execSQL("drop table products;");
-        db.execSQL("drop table categories;");*/
         db.execSQL(DBNames.CREATE_TABLE_CATEGORIES);
         db.execSQL(DBNames.CREATE_TABLE_PRODUCTS);
     }
@@ -26,27 +24,3 @@ public class DatabaseOpen extends SQLiteOpenHelper {
     }
 
 }
-
-
-
-/***
-
-
-
-
-
-
-Read from database
- SQLiteDatabase db = dbHelper.getReadableDatabase();
-     Cursor cursor = db.query(
-     FeedEntry.TABLE_NAME,   // The table to query
-     projection,             // String[] The array of columns to return (pass null to get all)
-     selection,              // String The columns for the WHERE clause
-     selectionArgs,          // String[] The values for the WHERE clause
-     null,                   // don't group the rows
-     null,                   // don't filter by row groups
-     sortOrder               // The sort order
- );
-
-
- */
