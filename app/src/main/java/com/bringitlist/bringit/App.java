@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.strictmode.SqliteObjectLeakedViolation;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -29,6 +30,8 @@ public class App extends Application {
 
     private static String TAG = "App";
     public ArrayList<IdAndChecked> userItems = null;
+    private SQLiteDatabase readableDb = null;
+    private SQLiteDatabase writableDb = null;
 
     public App() {
     }
@@ -105,14 +108,21 @@ public class App extends Application {
     }
 
     public SQLiteDatabase getReadableDB() {
-        return new DatabaseOpen(getApplicationContext()).getReadableDatabase();
+        if (readableDb == null)
+            readableDb = new DatabaseOpen(getApplicationContext()).getReadableDatabase();
+        return readableDb;
+    }
+
+    public SQLiteDatabase getWritableDB() {
+        if (writableDb == null)
+            writableDb = new DatabaseOpen(getApplicationContext()).getWritableDatabase();
+        return writableDb;
     }
 
 
     public void printSelect(String query, String[] selectionArgs) {
 
         Cursor cursor = getReadableDB().rawQuery(query, selectionArgs);
-        cursor.moveToFirst();
         StringBuilder strBuilder = new StringBuilder(".\n");
 
         String[] collumnNames = cursor.getColumnNames();
@@ -121,13 +131,14 @@ public class App extends Application {
             strBuilder.append(collumnNames[i]).append(",\t");
 
         strBuilder.append("\n");
-        do {
+
+        while (cursor.moveToNext()) {
             for (int i = 0; i < cursor.getColumnCount() - 1; i++)
                 strBuilder.append(cursor.getString(i)).append(",\t");
 
             strBuilder.append(cursor.getString(cursor.getColumnCount() - 1));
             strBuilder.append("\n");
-        } while (cursor.moveToNext());
+        }
         cursor.close();
         Log.i("Cursor Result", strBuilder.toString());
     }

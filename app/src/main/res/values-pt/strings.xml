@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_settings">Definições</string>
+    <string name="bought_history">Histórico</string>
+    <string name="this_years_total">Total Anual</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancelar</string>
+</resources>

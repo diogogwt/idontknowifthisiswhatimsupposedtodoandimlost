@@ -16,6 +16,7 @@ public class DBNames {
                     "id integer primary key," +
                     "cat_id integer not null," +
                     "name text not null," +
+                    "price real not null," +
                     "image text not null," +
                     "foreign key(cat_id) references " + CATEGORIES + "(id)" +
                     ")";
@@ -23,11 +24,11 @@ public class DBNames {
             "create table " + HISTORY + " (" +
                     "id integer primary key AUTOINCREMENT," +
                     "prod_id integer not null," +
-                    "time text DEFAULT CURRENT_TIMESTAMP," +
+                    "date text DEFAULT CURRENT_TIMESTAMP," +
                     "foreign key(prod_id) references " + PRODUCTS + "(id)" +
                     ")";
 
     public static final String INSERT_CATEGORY = "insert into " + CATEGORIES + " values(?,?);";
-    public static final String INSERT_PRODUCT = "insert into " + PRODUCTS + " values(?,?,?,?);";
+    public static final String INSERT_PRODUCT = "insert into " + PRODUCTS + " values(?,?,?,?,?);";
     public static final String INSERT_HISTORY = "insert into " + HISTORY + "(prod_id) values(?);";
 }

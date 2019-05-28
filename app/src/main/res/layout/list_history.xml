@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_margin="10dp"
+        android:id="@+id/list_history_text_view_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="7"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:layout_margin="10dp"
+        android:id="@+id/list_history_text_view_date"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:textSize="18sp"/>
+
+</LinearLayout>

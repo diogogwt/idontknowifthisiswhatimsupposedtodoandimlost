@@ -1,4 +1,8 @@
 <resources>
-    <string name="app_name">Bring It</string>
+    <string name="app_name" translatable="false">Bring It</string>
     <string name="action_settings">Settings</string>
+    <string name="bought_history">History</string>
+    <string name="this_years_total">This Years Total</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

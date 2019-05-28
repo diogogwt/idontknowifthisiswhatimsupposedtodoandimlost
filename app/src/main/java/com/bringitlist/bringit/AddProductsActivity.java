@@ -35,7 +35,6 @@ public class AddProductsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_products);
 
         adapter = new ProductsAdapter(this, null);
-
         gridView = findViewById(R.id.add_products_grid_view);
         gridView.setAdapter(adapter);
 
@@ -47,14 +46,10 @@ public class AddProductsActivity extends AppCompatActivity {
         for (int i = 0; i < items.length; i++)
             items[i] = new IdAndChecked();
 
-        cursor.moveToFirst();
-        items[0].id = cursor.getInt(0);
-        for (int i = 1; cursor.moveToNext(); i++) {
-            Log.i("CatAdapter", "CategoriesAdapter: " + cursor.getInt(0));
+        for (int i = 0; cursor.moveToNext(); i++) {
             items[i].id = cursor.getInt(0);
             items[i].checked = false;
         }
-
         cursor.close();
     }
 
