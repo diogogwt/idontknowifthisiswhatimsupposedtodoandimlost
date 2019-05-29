@@ -5,4 +5,6 @@
     <string name="this_years_total">This Years Total</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="plus_sign" translatable="false">+</string>
+    <string name="minus_sign" translatable="false">-</string>
 </resources>

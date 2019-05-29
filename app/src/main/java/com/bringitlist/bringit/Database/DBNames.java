@@ -10,8 +10,8 @@ public class DBNames {
     public static final String CATEGORIES = "categories";
     public static final String HISTORY = "history";
 
-    public static final String CREATE_TABLE_CATEGORIES = "create table " + CATEGORIES + " (id integer primary key,name text not null);";
-    public static final String CREATE_TABLE_PRODUCTS =
+    static final String CREATE_TABLE_CATEGORIES = "create table " + CATEGORIES + " (id integer primary key,name text not null);";
+    static final String CREATE_TABLE_PRODUCTS =
             "create table " + PRODUCTS + " (" +
                     "id integer primary key," +
                     "cat_id integer not null," +
@@ -20,15 +20,16 @@ public class DBNames {
                     "image text not null," +
                     "foreign key(cat_id) references " + CATEGORIES + "(id)" +
                     ")";
-    public static final String CREATE_TABLE_HISTORY =
+    static final String CREATE_TABLE_HISTORY =
             "create table " + HISTORY + " (" +
                     "id integer primary key AUTOINCREMENT," +
                     "prod_id integer not null," +
+                    "amount integer not null," +
                     "date text DEFAULT CURRENT_TIMESTAMP," +
                     "foreign key(prod_id) references " + PRODUCTS + "(id)" +
                     ")";
 
     public static final String INSERT_CATEGORY = "insert into " + CATEGORIES + " values(?,?);";
     public static final String INSERT_PRODUCT = "insert into " + PRODUCTS + " values(?,?,?,?,?);";
-    public static final String INSERT_HISTORY = "insert into " + HISTORY + "(prod_id) values(?);";
+    public static final String INSERT_HISTORY = "insert into " + HISTORY + "(prod_id,amount) values(?,?);";
 }

@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.bringitlist.bringit.Database.DBNames;
 import com.bringitlist.bringit.Database.DatabaseOpen;
 import com.bringitlist.bringit.Other.IdAndChecked;
+import com.bringitlist.bringit.Other.IdQuantChecked;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,7 +30,7 @@ import java.util.Arrays;
 public class App extends Application {
 
     private static String TAG = "App";
-    public ArrayList<IdAndChecked> userItems = null;
+    public ArrayList<IdQuantChecked> userItems = null;
     private SQLiteDatabase readableDb = null;
     private SQLiteDatabase writableDb = null;
 
@@ -39,8 +40,7 @@ public class App extends Application {
     public void DoOnFirstOpening() {
         if (isFirstOpening()) {
             try {
-                DatabaseOpen dbOpen = new DatabaseOpen(getApplicationContext());
-                SQLiteDatabase db = dbOpen.getWritableDatabase();
+                SQLiteDatabase db = this.getWritableDB();
 
                 String line;
                 BufferedReader br;
@@ -100,7 +100,7 @@ public class App extends Application {
     public void RetrieveAll() {
         try {
             ObjectInputStream oos = new ObjectInputStream(openFileInput("user_list"));
-            userItems = (ArrayList<IdAndChecked>) oos.readObject();
+            userItems = (ArrayList<IdQuantChecked>) oos.readObject();
             oos.close();
         } catch (Exception ex) {
             userItems = new ArrayList<>();
@@ -122,13 +122,13 @@ public class App extends Application {
 
     public void printSelect(String query, String[] selectionArgs) {
 
-        Cursor cursor = getReadableDB().rawQuery(query, selectionArgs);
+        Cursor cursor = this.getReadableDB().rawQuery(query, selectionArgs);
         StringBuilder strBuilder = new StringBuilder(".\n");
 
-        String[] collumnNames = cursor.getColumnNames();
+        String[] columnNames = cursor.getColumnNames();
 
-        for (int i = 0; i < collumnNames.length; i++)
-            strBuilder.append(collumnNames[i]).append(",\t");
+        for (String columnName : columnNames)
+            strBuilder.append(columnName).append(",\t");
 
         strBuilder.append("\n");
 

@@ -10,8 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.bringitlist.bringit.App;
 import com.bringitlist.bringit.Database.DBNames;
-import com.bringitlist.bringit.Database.DatabaseOpen;
 import com.bringitlist.bringit.R;
 
 public class CategoriesAdapter extends BaseAdapter {
@@ -24,7 +24,7 @@ public class CategoriesAdapter extends BaseAdapter {
 
     public CategoriesAdapter(Context context, IdAndChecked[] items) {
         this.context = context;
-        this.db = new DatabaseOpen(context).getReadableDatabase();
+        this.db = ((App) context.getApplicationContext()).getReadableDB();
         this.items = items;
     }
 
@@ -63,8 +63,8 @@ public class CategoriesAdapter extends BaseAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkBox.setChecked(!checkBox.isChecked());
-                items[position].checked = checkBox.isChecked();
+                items[position].reverse();
+                checkBox.setChecked(checkBox.isChecked());
             }
         });
         cursor.close();

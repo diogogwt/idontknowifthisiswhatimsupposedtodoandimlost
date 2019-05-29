@@ -1,6 +1,5 @@
 package com.bringitlist.bringit.Other;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,11 +8,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,7 +31,7 @@ public class UserListAdapter extends BaseAdapter {
 
     public Context context;
     private SQLiteDatabase db;
-    private ArrayList<IdAndChecked> items;
+    private ArrayList<IdQuantChecked> items;
 
     public UserListAdapter(Context context) {
         this.context = context;
@@ -62,11 +65,15 @@ public class UserListAdapter extends BaseAdapter {
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.product_layout, parent, false);
+            convertView = inflater.inflate(R.layout.user_product_layout, parent, false);
         }
 
         TextView nameView = convertView.findViewById(R.id.product_name);
         ImageView imageView = convertView.findViewById(R.id.product_image);
+        Button plusBtn = convertView.findViewById(R.id.product_plus_btn);
+        Button minusBtn = convertView.findViewById(R.id.product_minus_btn);
+        final EditText quantView = convertView.findViewById(R.id.product_quant);
+        quantView.setText(items.get(position).amount + "");
 
         nameView.setText(cursor.getString(0));
         try {
@@ -78,7 +85,7 @@ public class UserListAdapter extends BaseAdapter {
         }
         cursor.close();
 
-        /**---------------------------------------------------------------------*/
+        /**---------------------------------Listeners------------------------------------*/
         final View view = convertView;
 
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -86,7 +93,7 @@ public class UserListAdapter extends BaseAdapter {
             public boolean onLongClick(View v) {
                 AlertDialog dialog = new AlertDialog.Builder(context)
                         .setTitle("Tens a certeza que desejas remover da lista?")
-                        .setNegativeButton("Nãoe", null)
+                        .setNegativeButton("Não", null)
                         .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -110,6 +117,54 @@ public class UserListAdapter extends BaseAdapter {
             }
         });
 
+        plusBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int val = Integer.valueOf(quantView.getText().toString());
+                quantView.setText(val + 1 + "");
+            }
+        });
+        minusBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int val = Integer.valueOf(quantView.getText().toString());
+                quantView.setText(val - 1 + "");
+            }
+        });
+
+        quantView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    int val = Integer.valueOf(s.toString());
+                    int newVal = val;
+                    if (val < 1) {
+                        newVal = 1;
+                    } else if (val > 999) {
+                        newVal = 999;
+                    }
+                    if (val != newVal) {
+                        s.clear();
+                        s.append(String.valueOf(val));
+                    }
+                    items.get(position).amount = val;
+                } catch (Exception ignored) {
+                }
+            }
+        });
+
         return convertView;
+    }
+
+    private void updateQuant(int position, int val) {
+        items.get(position).amount = val;
     }
 }

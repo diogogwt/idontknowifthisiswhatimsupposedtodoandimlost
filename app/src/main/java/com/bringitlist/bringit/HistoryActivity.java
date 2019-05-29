@@ -36,21 +36,21 @@ public class HistoryActivity extends AppCompatActivity {
 
         ArrayList<HashMap<String, String>> arrayList = new ArrayList<>();
         SQLiteDatabase db = app.getReadableDB();
-        Cursor cursor = db.rawQuery("select products.name,date from history,products where products.id=history.prod_id;", null);
+        Cursor cursor = db.rawQuery("select products.name,date,amount,(amount*price) as price from history,products where products.id=history.prod_id;", null);
         while (cursor.moveToNext()) {
             HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("name", cursor.getString(0));
             hashMap.put("date", cursor.getString(1));
+            //hashMap.put("amount", cursor.getString(2));
+            hashMap.put("price", cursor.getString(3) + "€");
             arrayList.add(hashMap);
         }
         cursor.close();
-        String[] from = {"name", "date"};
-        int[] to = {R.id.list_history_text_view_name, R.id.list_history_text_view_date};
+        String[] from = {"name", "date", "price"};
+        int[] to = {R.id.list_history_text_view_name, R.id.list_history_text_view_date, R.id.list_history_text_view_price};
 
         adapter = new SimpleAdapter(this, arrayList, R.layout.list_history, from, to);
         listView.setAdapter(adapter);
-
-        app.printSelect("select products.name,date from history,products where products.id=history.prod_id;", null);
     }
 
     @Override

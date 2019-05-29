@@ -28,7 +28,6 @@ public class ProductsAdapter extends BaseAdapter {
 
     private Context context;
     private App app;
-    private DatabaseOpen dbOpen;
     private SQLiteDatabase db;
     private int[] ids;
 
@@ -36,10 +35,8 @@ public class ProductsAdapter extends BaseAdapter {
     public ProductsAdapter(Context context, Integer[] where) {
         this.context = context;
         this.app = (App) context.getApplicationContext();
-        this.dbOpen = new DatabaseOpen(context);
-        this.db = dbOpen.getReadableDatabase();
+        this.db = ((App) context.getApplicationContext()).getReadableDB();
 
-        SQLiteDatabase db = dbOpen.getReadableDatabase();
         if (where == null) {
 
             Cursor cursor = db.rawQuery("select id from " + DBNames.PRODUCTS + " order by name;", null);
@@ -109,9 +106,8 @@ public class ProductsAdapter extends BaseAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IdAndChecked das = new IdAndChecked();
+                IdQuantChecked das = new IdQuantChecked();
                 das.id = ids[position];
-                das.checked = false;
                 app.userItems.add(das);
                 ((Activity) context).finish();
             }

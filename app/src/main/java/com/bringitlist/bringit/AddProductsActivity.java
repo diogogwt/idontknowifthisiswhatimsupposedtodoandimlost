@@ -28,27 +28,27 @@ public class AddProductsActivity extends AppCompatActivity {
     private GridView gridView;
     private ProductsAdapter adapter;
     public IdAndChecked[] items;
+    private App app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_products);
 
+        app = (App) getApplicationContext();
         adapter = new ProductsAdapter(this, null);
         gridView = findViewById(R.id.add_products_grid_view);
         gridView.setAdapter(adapter);
 
 
-        SQLiteDatabase db = new DatabaseOpen(this).getReadableDatabase();
+        SQLiteDatabase db = app.getReadableDB();
         Cursor cursor = db.rawQuery("select id from " + DBNames.CATEGORIES + " order by name;", null);
 
         items = new IdAndChecked[cursor.getCount()];
-        for (int i = 0; i < items.length; i++)
-            items[i] = new IdAndChecked();
 
         for (int i = 0; cursor.moveToNext(); i++) {
+            items[i] = new IdAndChecked();
             items[i].id = cursor.getInt(0);
-            items[i].checked = false;
         }
         cursor.close();
     }
@@ -64,8 +64,7 @@ public class AddProductsActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_prod_select_cat:
 
-                LayoutInflater inflater = (LayoutInflater)
-                        getSystemService(LAYOUT_INFLATER_SERVICE);
+                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
                 View popupView = inflater.inflate(R.layout.popup_cat, null);
 
                 ListView listView = popupView.findViewById(R.id.popup_cat_listview);

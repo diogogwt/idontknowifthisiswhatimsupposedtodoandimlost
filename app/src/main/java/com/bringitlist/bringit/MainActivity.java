@@ -12,7 +12,7 @@ import android.widget.GridView;
 
 import com.bringitlist.bringit.Database.DBNames;
 import com.bringitlist.bringit.Database.DatabaseOpen;
-import com.bringitlist.bringit.Other.IdAndChecked;
+import com.bringitlist.bringit.Other.IdQuantChecked;
 import com.bringitlist.bringit.Other.UserListAdapter;
 
 import java.util.ArrayList;
@@ -27,8 +27,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Toolbar toolbar = findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
 
         app = (App) getApplication();
         app.DoOnFirstOpening();
@@ -47,14 +45,14 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SQLiteDatabase db = new DatabaseOpen(MainActivity.this).getWritableDatabase();
-                ArrayList<IdAndChecked> temp = (ArrayList<IdAndChecked>) app.userItems.clone();
+                SQLiteDatabase db = app.getWritableDB();
+                ArrayList<IdQuantChecked> temp = (ArrayList<IdQuantChecked>) app.userItems.clone();
 
-                for (IdAndChecked item : temp) {
+                for (IdQuantChecked item : temp) {
                     if (item.checked) {
                         app.userItems.remove(item);
 
-                        db.execSQL(DBNames.INSERT_HISTORY, new Integer[]{item.id});
+                        db.execSQL(DBNames.INSERT_HISTORY, new Integer[]{item.id,item.amount});
                     }
                 }
                 listAdapter.notifyDataSetChanged();
@@ -72,9 +70,9 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         listAdapter.notifyDataSetChanged();
 
-        app.printSelect("select * from history", null);
-        app.printSelect("select * from categories", null);
         app.printSelect("select * from products", null);
+        app.printSelect("select * from history", null);
+        //app.printSelect("select * from categories", null);
     }
 
     @Override
