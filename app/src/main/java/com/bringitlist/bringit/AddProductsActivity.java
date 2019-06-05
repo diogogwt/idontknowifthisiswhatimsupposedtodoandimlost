@@ -64,9 +64,9 @@ public class AddProductsActivity extends AppCompatActivity {
                 LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
                 View popupView = inflater.inflate(R.layout.popup_cat, null);
 
-                ListView listView = popupView.findViewById(R.id.popup_cat_listview);
-                final CategoriesAdapter catAdapter = new CategoriesAdapter(this, items);
-                listView.setAdapter(catAdapter);
+                ListView listViewPopup = popupView.findViewById(R.id.popup_cat_listview);
+                CategoriesAdapter catAdapter = new CategoriesAdapter(this, items);
+                listViewPopup.setAdapter(catAdapter);
 
                 Dialog dialog = new Dialog(this);
                 dialog.setContentView(popupView);
@@ -80,12 +80,12 @@ public class AddProductsActivity extends AppCompatActivity {
 
                         if (ids.size() == 0) {
                             adapter = new ProductsAdapter(AddProductsActivity.this, null);
-                            AddProductsActivity.this.listView.setAdapter(adapter);
                         } else {
                             Integer[] idsArray = ids.toArray(new Integer[0]);
                             adapter = new ProductsAdapter(AddProductsActivity.this, idsArray);
-                            AddProductsActivity.this.listView.setAdapter(adapter);
                         }
+                        listView.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
                     }
                 });
                 dialog.show();
