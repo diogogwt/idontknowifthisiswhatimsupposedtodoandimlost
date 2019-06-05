@@ -14,4 +14,5 @@
     <string name="fill_username">Fill username</string>
     <string name="password_constraints">Password needs to be longer than 6 character</string>
     <string name="incorrect_username">Incorrect username</string>
+    <string name="logout">Logout</string>
 </resources>

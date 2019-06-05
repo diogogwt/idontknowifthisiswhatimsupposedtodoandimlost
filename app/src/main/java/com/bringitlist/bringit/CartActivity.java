@@ -40,7 +40,7 @@ public class CartActivity extends AppCompatActivity {
             }
         });
         fab = findViewById(R.id.cart_prod_main);
-        /*fab.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SQLiteDatabase db = app.getWritableDB();
@@ -50,12 +50,12 @@ public class CartActivity extends AppCompatActivity {
                     if (item.checked) {
                         app.userItems.remove(item);
 
-                        db.execSQL(DBNames.INSERT_HISTORY, new Integer[]{item.id,item.amount});
+                        db.execSQL(DBNames.INSERT_HISTORY, new Integer[]{app.loggedUser, item.id, item.amount});
                     }
                 }
                 listAdapter.notifyDataSetChanged();
             }
-        });*/
+        });
 
         listAdapter = new UserListAdapter(this);
 
@@ -82,16 +82,28 @@ public class CartActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
-
+            case R.id.action_settings: {
 
                 break;
-            case R.id.history:
-
+            }
+            case R.id.history: {
                 Intent intent = new Intent(this, HistoryActivity.class);
                 startActivity(intent);
                 break;
+            }
+            case R.id.logout: {
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+            break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        app.saveUserListToDatabase();
     }
 }

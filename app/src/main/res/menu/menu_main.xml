@@ -10,4 +10,8 @@
         android:id="@+id/history"
         android:title="@string/bought_history"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/logout"
+        android:title="@string/logout"
+        app:showAsAction="never" />
 </menu>

@@ -12,4 +12,5 @@
     <string name="fill_username">Preencha o nome de utilizador</string>
     <string name="password_constraints">Password precisa de ter mais de 6 caracteres</string>
     <string name="incorrect_username">Nome de utilizador incorreto</string>
+    <string name="logout">Sair da conta</string>
 </resources>

@@ -107,8 +107,6 @@ public class ProductsAdapter extends BaseAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 IdQuantChecked das = new IdQuantChecked();
                 das.id = ids[position];
                 app.userItems.add(das);

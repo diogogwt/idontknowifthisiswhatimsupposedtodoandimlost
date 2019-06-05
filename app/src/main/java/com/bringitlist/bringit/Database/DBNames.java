@@ -54,7 +54,7 @@ public class DBNames {
 
     public static final String INSERT_CATEGORY = "insert into " + CATEGORIES + " values(?,?);";
     public static final String INSERT_PRODUCT = "insert into " + PRODUCTS + " values(?,?,?,?,?);";
-    public static final String INSERT_HISTORY = "insert into " + HISTORY + "(prod_id,amount) values(?,?);";
+    public static final String INSERT_HISTORY = "insert into " + HISTORY + "(user_id,prod_id,amount) values(?,?,?);";
     public static final String INSERT_USER = "insert into " + USERS + "(prod_id,amount) values(?,?);";
-    public static final String INSERT_CART_ITEM = "insert into " + CARTS + "(prod_id,amount) values(?,?);";
+    public static final String INSERT_CART_ITEM = "insert into " + CARTS + "(user_id,prod_id,amount) values(?,?,?);";
 }

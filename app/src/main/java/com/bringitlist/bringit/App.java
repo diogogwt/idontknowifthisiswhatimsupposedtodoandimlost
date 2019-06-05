@@ -4,20 +4,15 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.strictmode.SqliteObjectLeakedViolation;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.bringitlist.bringit.Database.DBNames;
 import com.bringitlist.bringit.Database.DatabaseOpen;
-import com.bringitlist.bringit.Other.IdAndChecked;
 import com.bringitlist.bringit.Other.IdQuantChecked;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -38,22 +33,39 @@ public class App extends Application {
     public App() {
     }
 
-
     public void fillUserItems() {
         SQLiteDatabase db = getReadableDB();
 
         Cursor cursor = db.rawQuery("select prod_id,amount from " + DBNames.PRODUCTS + " where user_id = ?;", new String[]{String.valueOf(loggedUser)});
-        IdQuantChecked[] ids;
-        ids = new IdQuantChecked[cursor.getCount()];
 
-        for (int i = 0; cursor.moveToNext(); i++) {
-            ids[i].id = cursor.getInt(0);
-            ids[i].amount = cursor.getInt(0);
-            ids[i].checked = false;
+        userItems = new ArrayList<>(cursor.getCount());
+
+        while (cursor.moveToNext()) {
+            IdQuantChecked temp = new IdQuantChecked();
+            temp.id = cursor.getInt(0);
+            temp.amount = cursor.getInt(0);
+            temp.checked = false;
+
+            userItems.add(temp);
         }
         cursor.close();
     }
 
+    public void saveUserListToDatabase() {
+        SQLiteDatabase db = getWritableDB();
+
+        db.execSQL("delete from carts where user_id = ?", new String[]{String.valueOf(loggedUser)});
+
+        String[] selectionArgs = new String[3];
+        selectionArgs[0] = String.valueOf(loggedUser);
+
+        for (IdQuantChecked item : userItems) {
+            selectionArgs[1] = String.valueOf(item.id);
+            selectionArgs[2] = String.valueOf(item.amount);
+
+            db.execSQL(DBNames.INSERT_CART_ITEM, selectionArgs);
+        }
+    }
 
 
     /*public void SaveAll() {
