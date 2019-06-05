@@ -7,4 +7,11 @@
     <string name="cancel">Cancel</string>
     <string name="plus_sign" translatable="false">+</string>
     <string name="minus_sign" translatable="false">-</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="fill_username">Fill username</string>
+    <string name="password_constraints">Password needs to be longer than 6 character</string>
+    <string name="incorrect_username">Incorrect username</string>
 </resources>

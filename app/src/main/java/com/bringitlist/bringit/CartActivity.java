@@ -17,7 +17,7 @@ import com.bringitlist.bringit.Other.UserListAdapter;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class CartActivity extends AppCompatActivity {
 
     private App app;
     private GridView gridView;
@@ -29,9 +29,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         app = (App) getApplication();
-        app.DoOnFirstOpening();
-        app.RetrieveAll();
-
+        app.fillUserItems();
 
         FloatingActionButton fab = findViewById(R.id.add_prod_main);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -42,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         fab = findViewById(R.id.cart_prod_main);
-        fab.setOnClickListener(new View.OnClickListener() {
+        /*fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SQLiteDatabase db = app.getWritableDB();
@@ -57,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 listAdapter.notifyDataSetChanged();
             }
-        });
+        });*/
 
         listAdapter = new UserListAdapter(this);
 
@@ -95,11 +93,5 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        app.SaveAll();
     }
 }

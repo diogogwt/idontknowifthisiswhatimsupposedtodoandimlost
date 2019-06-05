@@ -5,4 +5,11 @@
     <string name="this_years_total">Total Anual</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancelar</string>
+    <string name="register">Registar</string>
+    <string name="login">Entrar</string>
+    <string name="username">Nome do utilizador</string>
+    <string name="password">Palavra passe</string>
+    <string name="fill_username">Preencha o nome de utilizador</string>
+    <string name="password_constraints">Password precisa de ter mais de 6 caracteres</string>
+    <string name="incorrect_username">Nome de utilizador incorreto</string>
 </resources>

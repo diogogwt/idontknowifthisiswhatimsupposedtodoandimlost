@@ -32,6 +32,7 @@ public class UserListAdapter extends BaseAdapter {
     public Context context;
     private SQLiteDatabase db;
     private ArrayList<IdQuantChecked> items;
+    private int[] ids;
 
     public UserListAdapter(Context context) {
         this.context = context;

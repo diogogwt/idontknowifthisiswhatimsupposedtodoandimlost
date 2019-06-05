@@ -33,61 +33,30 @@ public class App extends Application {
     public ArrayList<IdQuantChecked> userItems = null;
     private SQLiteDatabase readableDb = null;
     private SQLiteDatabase writableDb = null;
+    public Integer loggedUser = null;
 
     public App() {
     }
 
-    public void DoOnFirstOpening() {
-        if (isFirstOpening()) {
-            try {
-                SQLiteDatabase db = this.getWritableDB();
 
-                String line;
-                BufferedReader br;
+    public void fillUserItems() {
+        SQLiteDatabase db = getReadableDB();
 
-                br = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.categories)));
-                while ((line = br.readLine()) != null) {
+        Cursor cursor = db.rawQuery("select prod_id,amount from " + DBNames.PRODUCTS + " where user_id = ?;", new String[]{String.valueOf(loggedUser)});
+        IdQuantChecked[] ids;
+        ids = new IdQuantChecked[cursor.getCount()];
 
-                    String[] splittedLine = line.split(";");
-                    Log.d(TAG, Arrays.toString(splittedLine));
-                    db.execSQL(DBNames.INSERT_CATEGORY, splittedLine);
-                }
-
-                br = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.products)));
-                for (int i = 0; (line = br.readLine()) != null; i++) {
-
-                    String[] splittedLine = line.split(";");
-                    String[] allValues = new String[splittedLine.length + 1];
-                    allValues[0] = "" + i;
-                    System.arraycopy(splittedLine, 0, allValues, 1, splittedLine.length);
-                    allValues[allValues.length - 1] = "prod_img/" + allValues[allValues.length - 1];
-
-                    Log.i(TAG, Arrays.toString(allValues));
-
-                    db.execSQL(DBNames.INSERT_PRODUCT, allValues);
-                }
-            } catch (IOException e) {
-                Log.e("BIG OPPSIE", "Filling Database: ", e);
-            }
+        for (int i = 0; cursor.moveToNext(); i++) {
+            ids[i].id = cursor.getInt(0);
+            ids[i].amount = cursor.getInt(0);
+            ids[i].checked = false;
         }
-    }
-
-    public boolean isFirstOpening() {
-
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("random", MODE_PRIVATE);
-        boolean firstTime = pref.getBoolean("firstTime", true);
-        Log.i(TAG, "DoOnFirstOpening: Fill Database? " + firstTime);
-        if (firstTime) {
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putBoolean("firstTime", false);
-            editor.apply();
-        }
-        return firstTime;
-        //return true;
+        cursor.close();
     }
 
 
-    public void SaveAll() {
+
+    /*public void SaveAll() {
         try {
             ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("user_list", MODE_PRIVATE));
             oos.writeObject(userItems);
@@ -105,7 +74,7 @@ public class App extends Application {
         } catch (Exception ex) {
             userItems = new ArrayList<>();
         }
-    }
+    }*/
 
     public SQLiteDatabase getReadableDB() {
         if (readableDb == null)
@@ -141,5 +110,54 @@ public class App extends Application {
         }
         cursor.close();
         Log.i("Cursor Result", strBuilder.toString());
+    }
+
+    public boolean isFirstOpening() {
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("random", MODE_PRIVATE);
+        boolean firstTime = pref.getBoolean("firstTime", true);
+        Log.i(TAG, "DoOnFirstOpening: Fill Database? " + firstTime);
+        if (firstTime) {
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putBoolean("firstTime", false);
+            editor.apply();
+        }
+        return firstTime;
+        //return true;
+    }
+
+    public void DoOnFirstOpening() {
+        if (isFirstOpening()) {
+            try {
+                SQLiteDatabase db = this.getWritableDB();
+
+                String line;
+                BufferedReader br;
+
+                br = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.categories)));
+                while ((line = br.readLine()) != null) {
+
+                    String[] splittedLine = line.split(";");
+                    Log.d(TAG, Arrays.toString(splittedLine));
+                    db.execSQL(DBNames.INSERT_CATEGORY, splittedLine);
+                }
+
+                br = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.products)));
+                for (int i = 0; (line = br.readLine()) != null; i++) {
+
+                    String[] splittedLine = line.split(";");
+                    String[] allValues = new String[splittedLine.length + 1];
+                    allValues[0] = "" + i;
+                    System.arraycopy(splittedLine, 0, allValues, 1, splittedLine.length);
+                    allValues[allValues.length - 1] = "prod_img/" + allValues[allValues.length - 1];
+
+                    Log.i(TAG, Arrays.toString(allValues));
+
+                    db.execSQL(DBNames.INSERT_PRODUCT, allValues);
+                }
+            } catch (IOException e) {
+                Log.e("BIG OPPSIE", "Filling Database: ", e);
+            }
+        }
     }
 }

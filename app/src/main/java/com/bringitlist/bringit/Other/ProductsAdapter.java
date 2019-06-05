@@ -83,6 +83,7 @@ public class ProductsAdapter extends BaseAdapter {
 
         String[] selectionArgs = {String.valueOf(getItemId(position))};
         Cursor cursor = db.query(DBNames.PRODUCTS, new String[]{"name", "image"}, "id=?", selectionArgs, null, null, null);
+        //Cursor cursor = db.rawQuery("select name,image from products where id=?",selectionArgs);
         cursor.moveToFirst();
 
         if (convertView == null) {
@@ -106,6 +107,8 @@ public class ProductsAdapter extends BaseAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 IdQuantChecked das = new IdQuantChecked();
                 das.id = ids[position];
                 app.userItems.add(das);
