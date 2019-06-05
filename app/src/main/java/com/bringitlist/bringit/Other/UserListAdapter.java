@@ -29,10 +29,10 @@ import java.util.ArrayList;
 
 public class UserListAdapter extends BaseAdapter {
 
+    public static String TAG = "UserListAdapter";
     public Context context;
     private SQLiteDatabase db;
     private ArrayList<IdQuantChecked> items;
-    private int[] ids;
 
     public UserListAdapter(Context context) {
         this.context = context;
@@ -58,6 +58,7 @@ public class UserListAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
+        Log.i(TAG, "getView: Start");
         String[] selectionArgs = new String[]{String.valueOf(getItemId(position))};
         Cursor cursor = db.query(DBNames.PRODUCTS, new String[]{"name", "image"}, "id=?", selectionArgs, null, null, null);
         if (!cursor.moveToFirst()) {
@@ -68,19 +69,26 @@ public class UserListAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.user_product_layout, parent, false);
         }
+        Log.i(TAG, "getView: Inflated");
 
         TextView nameView = convertView.findViewById(R.id.product_name);
         ImageView imageView = convertView.findViewById(R.id.product_image);
         Button plusBtn = convertView.findViewById(R.id.product_plus_btn);
         Button minusBtn = convertView.findViewById(R.id.product_minus_btn);
         final EditText quantView = convertView.findViewById(R.id.product_quant);
-        quantView.setText(items.get(position).amount + "");
 
+        quantView.setText("test");
+        Log.i(TAG, "getView: Got Views");
+        Log.i(TAG, "getView: " + items.get(position).amount);
+        quantView.setText("" + items.get(position).amount);
+        Log.i(TAG, "getView: Got quant");
         nameView.setText(cursor.getString(0));
         try {
+            Log.i(TAG, "getView: Start Image");
             String fileName = cursor.getString(1);
             Bitmap bitmap = BitmapFactory.decodeStream(context.getResources().getAssets().open(fileName));
             imageView.setImageBitmap(bitmap);
+            Log.i(TAG, "getView: Bitmap Set");
         } catch (Exception e) {
             Log.e("BIG OPPSIE", "putting image on grid element: ", e);
         }
@@ -162,10 +170,7 @@ public class UserListAdapter extends BaseAdapter {
             }
         });
 
+        Log.i(TAG, "getView: End");
         return convertView;
-    }
-
-    private void updateQuant(int position, int val) {
-        items.get(position).amount = val;
     }
 }

@@ -45,20 +45,22 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, getString(R.string.password_constraints), Toast.LENGTH_LONG).show();
         }
 
-        Cursor cursor = db.rawQuery("select id,password from users where username = ?", new String[]{username});
+        Cursor cursor = db.rawQuery("select id,password_hash from users where username = ?", new String[]{username});
 
         if (!cursor.moveToFirst()) {
             Toast.makeText(this, getString(R.string.incorrect_username), Toast.LENGTH_LONG).show();
         } else {
             String hashedPassword = cursor.getString(1);
-            if (hashedPassword.equals(hash(password))) {
+            if (hashedPassword.equals(App.hash(password))) {
 
                 app.loggedUser = cursor.getInt(0);
                 cursor.close();
                 Intent intent = new Intent(this, CartActivity.class);
                 startActivity(intent);
+                finish();
                 return;
             }
+            Toast.makeText(this, getString(R.string.incorrect_password), Toast.LENGTH_LONG).show();
         }
         cursor.close();
     }
@@ -69,28 +71,5 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-
-    public static String hash(String input) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] messageDigest = md.digest(input.getBytes());
-
-            BigInteger no = new BigInteger(1, messageDigest);
-            String hashtext = no.toString(16);
-
-            while (hashtext.length() < 32) {
-                hashtext = "0" + hashtext;
-            }
-            return hashtext;
-        }
-
-        // For specifying wrong message digest algorithms
-        catch (NoSuchAlgorithmException e) {
-            System.out.println("Exception thrown"
-                    + " for incorrect algorithm: " + e);
-
-            return null;
-        }
-    }
 
 }

@@ -15,4 +15,10 @@
     <string name="password_constraints">Password needs to be longer than 6 character</string>
     <string name="incorrect_username">Incorrect username</string>
     <string name="logout">Logout</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="username_too_short">Username too short</string>
+    <string name="password_too_short">Password too short</string>
+    <string name="passwords_not_match">Passwords do not match</string>
+    <string name="username_taken">Username taken</string>
+    <string name="incorrect_password">Incorrect password</string>
 </resources>

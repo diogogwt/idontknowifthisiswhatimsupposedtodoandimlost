@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -61,6 +62,7 @@ public class CartActivity extends AppCompatActivity {
 
         gridView = findViewById(R.id.main_grid_view);
         gridView.setAdapter(listAdapter);
+        Log.i("Cart", "onCreate: Done");
     }
 
     @Override
@@ -68,8 +70,10 @@ public class CartActivity extends AppCompatActivity {
         super.onStart();
         listAdapter.notifyDataSetChanged();
 
+        //app.printSelect("select * from users", null);
+        app.printSelect("select * from carts", null);
         app.printSelect("select * from products", null);
-        app.printSelect("select * from history", null);
+        //app.printSelect("select * from history", null);
         //app.printSelect("select * from categories", null);
     }
 

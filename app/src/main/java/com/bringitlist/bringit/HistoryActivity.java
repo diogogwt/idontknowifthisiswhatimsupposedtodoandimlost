@@ -36,18 +36,20 @@ public class HistoryActivity extends AppCompatActivity {
 
         ArrayList<HashMap<String, String>> arrayList = new ArrayList<>();
         SQLiteDatabase db = app.getReadableDB();
-        Cursor cursor = db.rawQuery("select products.name,date,amount,(amount*price) as price from history,products where products.id=history.prod_id;", null);
+
+        String[] args = new String[]{String.valueOf(app.loggedUser)};
+        Cursor cursor = db.rawQuery("select products.name,date,amount,(amount*price) as price from history,products where history.user_id=? and products.id=history.prod_id;", args);
         while (cursor.moveToNext()) {
             HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("name", cursor.getString(0));
             hashMap.put("date", cursor.getString(1));
-            //hashMap.put("amount", cursor.getString(2));
+            hashMap.put("amount", cursor.getString(2));
             hashMap.put("price", cursor.getString(3) + "€");
             arrayList.add(hashMap);
         }
         cursor.close();
-        String[] from = {"name", "date", "price"};
-        int[] to = {R.id.list_history_text_view_name, R.id.list_history_text_view_date, R.id.list_history_text_view_price};
+        String[] from = {"name", "date", "amount", "price"};
+        int[] to = {R.id.list_history_text_view_name, R.id.list_history_text_view_date, R.id.list_history_text_view_amount, R.id.list_history_text_view_price};
 
         adapter = new SimpleAdapter(this, arrayList, R.layout.list_history, from, to);
         listView.setAdapter(adapter);

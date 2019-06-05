@@ -17,7 +17,7 @@ public class DBNames {
             "create table " + USERS + " (" +
                     "id integer primary key AUTOINCREMENT," +
                     "username text not null," +
-                    "password_hash text not null," +
+                    "password_hash text not null" +
                     ")";
 
     static final String CREATE_TABLE_CATEGORIES = "create table " + CATEGORIES + " (id integer primary key,name text not null);";
@@ -38,23 +38,23 @@ public class DBNames {
                     "prod_id integer not null," +
                     "amount integer not null," +
                     "date text DEFAULT CURRENT_TIMESTAMP," +
-                    "foreign key(user_id) references " + USERS + "(id)" +
+                    "foreign key(user_id) references " + USERS + "(id)," +
                     "foreign key(prod_id) references " + PRODUCTS + "(id)" +
                     ")";
 
     static final String CREATE_TABLE_CARTS =
             "create table " + CARTS + " (" +
-                    "id integer primary key AUTOINCREMENT" +
+                    "id integer primary key AUTOINCREMENT," +
                     "user_id integer," +
                     "prod_id text not null," +
                     "amount text not null," +
-                    "foreign key(user_id) references " + USERS + "(id)" +
+                    "foreign key(user_id) references " + USERS + "(id)," +
                     "foreign key(prod_id) references " + PRODUCTS + "(id)" +
                     ")";
 
     public static final String INSERT_CATEGORY = "insert into " + CATEGORIES + " values(?,?);";
     public static final String INSERT_PRODUCT = "insert into " + PRODUCTS + " values(?,?,?,?,?);";
     public static final String INSERT_HISTORY = "insert into " + HISTORY + "(user_id,prod_id,amount) values(?,?,?);";
-    public static final String INSERT_USER = "insert into " + USERS + "(prod_id,amount) values(?,?);";
+    public static final String INSERT_USER = "insert into " + USERS + "(username,password_hash) values(?,?);";
     public static final String INSERT_CART_ITEM = "insert into " + CARTS + "(user_id,prod_id,amount) values(?,?,?);";
 }
