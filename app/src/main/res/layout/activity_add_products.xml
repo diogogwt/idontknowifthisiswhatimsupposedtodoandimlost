@@ -8,11 +8,10 @@
     tools:context=".AddProductsActivity"
     android:background="#DDD">
 
-    <GridView
+    <ListView
         android:id="@+id/add_products_grid_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:horizontalSpacing="3dp"
-        android:numColumns="auto_fit" />
+        android:horizontalSpacing="3dp" />
 
 </RelativeLayout>

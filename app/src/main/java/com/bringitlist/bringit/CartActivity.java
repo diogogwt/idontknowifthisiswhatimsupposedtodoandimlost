@@ -9,10 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.GridView;
+import android.widget.ListView;
 
 import com.bringitlist.bringit.Database.DBNames;
-import com.bringitlist.bringit.Database.DatabaseOpen;
 import com.bringitlist.bringit.Other.IdQuantChecked;
 import com.bringitlist.bringit.Other.UserListAdapter;
 
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 public class CartActivity extends AppCompatActivity {
 
     private App app;
-    private GridView gridView;
+    private ListView listView;
     private UserListAdapter listAdapter;
 
     @Override
@@ -60,8 +59,8 @@ public class CartActivity extends AppCompatActivity {
 
         listAdapter = new UserListAdapter(this);
 
-        gridView = findViewById(R.id.main_grid_view);
-        gridView.setAdapter(listAdapter);
+        listView = findViewById(R.id.main_grid_view);
+        listView.setAdapter(listAdapter);
         Log.i("Cart", "onCreate: Done");
     }
 
@@ -70,9 +69,12 @@ public class CartActivity extends AppCompatActivity {
         super.onStart();
         listAdapter.notifyDataSetChanged();
 
+        for (IdQuantChecked item : listAdapter.items) {
+            item.checked = false;
+        }
         //app.printSelect("select * from users", null);
-        app.printSelect("select * from carts", null);
-        app.printSelect("select * from products", null);
+        //app.printSelect("select * from carts", null);
+        //app.printSelect("select * from products", null);
         //app.printSelect("select * from history", null);
         //app.printSelect("select * from categories", null);
     }

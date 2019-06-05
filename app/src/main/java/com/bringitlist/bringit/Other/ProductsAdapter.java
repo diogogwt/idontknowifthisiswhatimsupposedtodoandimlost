@@ -12,12 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bringitlist.bringit.App;
 import com.bringitlist.bringit.Database.DBNames;
-import com.bringitlist.bringit.Database.DatabaseOpen;
 import com.bringitlist.bringit.R;
 
 import java.util.Arrays;
@@ -29,7 +29,7 @@ public class ProductsAdapter extends BaseAdapter {
     private Context context;
     private App app;
     private SQLiteDatabase db;
-    private int[] ids;
+    public IdAndChecked[] ids;
 
     //para selecionar categorias receber um array com os ids ou nomes
     public ProductsAdapter(Context context, Integer[] where) {
@@ -37,29 +37,25 @@ public class ProductsAdapter extends BaseAdapter {
         this.app = (App) context.getApplicationContext();
         this.db = ((App) context.getApplicationContext()).getReadableDB();
 
+        Cursor cursor = null;
+
         if (where == null) {
+            cursor = db.rawQuery("select id from " + DBNames.PRODUCTS + " order by name;", null);
 
-            Cursor cursor = db.rawQuery("select id from " + DBNames.PRODUCTS + " order by name;", null);
-            ids = new int[cursor.getCount()];
-
-            cursor.moveToFirst();
-            for (int i = 0; cursor.moveToNext(); i++) {
-                ids[i] = cursor.getInt(0);
-            }
-            cursor.close();
         } else {
             String whereString = TextUtils.join(",", where);
-
-            Cursor cursor = db.rawQuery("select id from " + DBNames.PRODUCTS + " where cat_id in (" + whereString + ") order by name;", null);
-            ids = new int[cursor.getCount()];
-            cursor.moveToFirst();
-            for (int i = 0; cursor.moveToNext(); i++) {
-                ids[i] = cursor.getInt(0);
-            }
-            cursor.close();
+            cursor = db.rawQuery("select id from " + DBNames.PRODUCTS + " where cat_id in (" + whereString + ") order by name;", null);
         }
 
-        Log.i(TAG, Arrays.toString(ids));
+        ids = new IdAndChecked[cursor.getCount()];
+
+        for (int i = 0; cursor.moveToNext(); i++) {
+            ids[i] = new IdAndChecked();
+            ids[i].id = cursor.getInt(0);
+            ids[i].checked = false;
+        }
+        cursor.close();
+
     }
 
     @Override
@@ -74,9 +70,8 @@ public class ProductsAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return ids[position];
+        return ids[position].id;
     }
-
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -93,6 +88,7 @@ public class ProductsAdapter extends BaseAdapter {
 
         TextView nameView = convertView.findViewById(R.id.product_name);
         ImageView imageView = convertView.findViewById(R.id.product_image);
+        CheckBox checkBox = convertView.findViewById(R.id.product_checkbox_right);
 
         nameView.setText(cursor.getString(0));
         try {
@@ -104,13 +100,10 @@ public class ProductsAdapter extends BaseAdapter {
         }
         cursor.close();
 
-        convertView.setOnClickListener(new View.OnClickListener() {
+        checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IdQuantChecked das = new IdQuantChecked();
-                das.id = ids[position];
-                app.userItems.add(das);
-                ((Activity) context).finish();
+                ids[position].reverse();
             }
         });
 

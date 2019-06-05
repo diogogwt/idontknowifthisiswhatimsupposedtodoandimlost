@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,7 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,7 +32,7 @@ public class UserListAdapter extends BaseAdapter {
     public static String TAG = "UserListAdapter";
     public Context context;
     private SQLiteDatabase db;
-    private ArrayList<IdQuantChecked> items;
+    public ArrayList<IdQuantChecked> items;
 
     public UserListAdapter(Context context) {
         this.context = context;
@@ -67,21 +67,17 @@ public class UserListAdapter extends BaseAdapter {
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.user_product_layout, parent, false);
+            convertView = inflater.inflate(R.layout.new_user_layout, parent, false);
         }
-        Log.i(TAG, "getView: Inflated");
 
-        TextView nameView = convertView.findViewById(R.id.product_name);
-        ImageView imageView = convertView.findViewById(R.id.product_image);
-        Button plusBtn = convertView.findViewById(R.id.product_plus_btn);
-        Button minusBtn = convertView.findViewById(R.id.product_minus_btn);
-        final EditText quantView = convertView.findViewById(R.id.product_quant);
+        TextView nameView = convertView.findViewById(R.id.user_product_name);
+        ImageView imageView = convertView.findViewById(R.id.user_product_image);
+        ImageButton plusBtn = convertView.findViewById(R.id.user_product_plus_btn);
+        ImageButton minusBtn = convertView.findViewById(R.id.user_product_minus_btn);
+        CheckBox checkBox = convertView.findViewById(R.id.user_product_checkbox);
+        final TextView quantView = convertView.findViewById(R.id.user_product_amount);
 
-        quantView.setText("test");
-        Log.i(TAG, "getView: Got Views");
-        Log.i(TAG, "getView: " + items.get(position).amount);
-        quantView.setText("" + items.get(position).amount);
-        Log.i(TAG, "getView: Got quant");
+        quantView.setText(String.valueOf(items.get(position).amount));
         nameView.setText(cursor.getString(0));
         try {
             Log.i(TAG, "getView: Start Image");
@@ -115,14 +111,12 @@ public class UserListAdapter extends BaseAdapter {
                 return true;
             }
         });
-        convertView.setOnClickListener(new View.OnClickListener() {
+        checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 items.get(position).reverse();
-                if (items.get(position).checked)
-                    view.setBackgroundColor(Color.GRAY);
-                else
-                    view.setBackgroundColor(Color.WHITE);
+                CheckBox temp = (CheckBox) v;
+                temp.setChecked(temp.isChecked());
             }
         });
 
@@ -162,7 +156,7 @@ public class UserListAdapter extends BaseAdapter {
                     }
                     if (val != newVal) {
                         s.clear();
-                        s.append(String.valueOf(val));
+                        s.append(String.valueOf(newVal));
                     }
                     items.get(position).amount = val;
                 } catch (Exception ignored) {

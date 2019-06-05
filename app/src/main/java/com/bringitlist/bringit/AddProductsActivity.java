@@ -6,26 +6,23 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.ListView;
 
 import com.bringitlist.bringit.Database.DBNames;
-import com.bringitlist.bringit.Database.DatabaseOpen;
 import com.bringitlist.bringit.Other.CategoriesAdapter;
 import com.bringitlist.bringit.Other.IdAndChecked;
+import com.bringitlist.bringit.Other.IdQuantChecked;
 import com.bringitlist.bringit.Other.ProductsAdapter;
 
 import java.util.ArrayList;
 
 public class AddProductsActivity extends AppCompatActivity {
 
-    private GridView gridView;
+    private ListView listView;
     private ProductsAdapter adapter;
     public IdAndChecked[] items;
     private App app;
@@ -37,8 +34,8 @@ public class AddProductsActivity extends AppCompatActivity {
 
         app = (App) getApplicationContext();
         adapter = new ProductsAdapter(this, null);
-        gridView = findViewById(R.id.add_products_grid_view);
-        gridView.setAdapter(adapter);
+        listView = findViewById(R.id.add_products_grid_view);
+        listView.setAdapter(adapter);
 
 
         SQLiteDatabase db = app.getReadableDB();
@@ -83,11 +80,11 @@ public class AddProductsActivity extends AppCompatActivity {
 
                         if (ids.size() == 0) {
                             adapter = new ProductsAdapter(AddProductsActivity.this, null);
-                            gridView.setAdapter(adapter);
+                            AddProductsActivity.this.listView.setAdapter(adapter);
                         } else {
                             Integer[] idsArray = ids.toArray(new Integer[0]);
                             adapter = new ProductsAdapter(AddProductsActivity.this, idsArray);
-                            gridView.setAdapter(adapter);
+                            AddProductsActivity.this.listView.setAdapter(adapter);
                         }
                     }
                 });
@@ -96,5 +93,25 @@ public class AddProductsActivity extends AppCompatActivity {
                 return true;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        for (IdAndChecked item : adapter.ids) {
+            if (item.checked) {
+                boolean toAdd = true;
+                for (IdAndChecked i : app.userItems) {
+                    if (i.id == item.id)
+                        toAdd = false;
+                }
+                if (toAdd) {
+                    IdQuantChecked temp = new IdQuantChecked();
+                    temp.id = item.id;
+                    app.userItems.add(temp);
+                }
+            }
+        }
     }
 }
