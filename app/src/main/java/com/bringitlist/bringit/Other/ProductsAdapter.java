@@ -35,16 +35,16 @@ public class ProductsAdapter extends BaseAdapter {
     public ProductsAdapter(Context context, Integer[] where) {
         this.context = context;
         this.app = (App) context.getApplicationContext();
-        this.db = ((App) context.getApplicationContext()).getReadableDB();
+        this.db = app.getReadableDB();
 
         Cursor cursor = null;
 
         if (where == null) {
-            cursor = db.rawQuery("select id from " + DBNames.PRODUCTS + " order by name;", null);
+            cursor = db.rawQuery("select id from " + DBNames.PRODUCTS + " order by cat_id,name;", null);
 
         } else {
             String whereString = TextUtils.join(",", where);
-            cursor = db.rawQuery("select id from " + DBNames.PRODUCTS + " where cat_id in (" + whereString + ") order by name;", null);
+            cursor = db.rawQuery("select id from " + DBNames.PRODUCTS + " where cat_id in (" + whereString + ") order by cat_id,name;", null);
         }
 
         ids = new IdAndChecked[cursor.getCount()];

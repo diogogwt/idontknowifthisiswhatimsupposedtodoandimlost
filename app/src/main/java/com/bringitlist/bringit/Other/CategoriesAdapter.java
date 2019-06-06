@@ -3,6 +3,9 @@ package com.bringitlist.bringit.Other;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +14,15 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.bringitlist.bringit.App;
-import com.bringitlist.bringit.Database.DBNames;
 import com.bringitlist.bringit.R;
 
 public class CategoriesAdapter extends BaseAdapter {
 
+    public static String TAG = "CategoriesAdapter";
 
     private Context context;
     private SQLiteDatabase db;
-    private IdAndChecked[] items;
+    IdAndChecked[] items;
 
 
     public CategoriesAdapter(Context context, IdAndChecked[] items) {
@@ -47,7 +50,8 @@ public class CategoriesAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
 
         String[] selectionArgs = {String.valueOf(getItemId(position))};
-        Cursor cursor = db.query(DBNames.CATEGORIES, new String[]{"name"}, "id=?", selectionArgs, null, null, null);
+        //Cursor cursor = db.query(DBNames.CATEGORIES, new String[]{"name"}, "id=?", selectionArgs, null, null, null);
+        Cursor cursor = db.rawQuery("select name from categories where id=?", selectionArgs);
         cursor.moveToFirst();
 
         if (convertView == null) {
@@ -60,14 +64,14 @@ public class CategoriesAdapter extends BaseAdapter {
         TextView textView = convertView.findViewById(R.id.row_cat_textview);
         textView.setText(cursor.getString(0));
 
+        cursor.close();
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 items[position].reverse();
-                checkBox.setChecked(checkBox.isChecked());
+                checkBox.setChecked(!checkBox.isChecked());
             }
         });
-        cursor.close();
 
         return convertView;
     }

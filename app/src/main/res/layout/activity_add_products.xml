@@ -7,10 +7,23 @@
     android:orientation="vertical"
     tools:context=".AddProductsActivity">
 
+    <ImageView
+        android:id="@+id/add_products_image_view"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_search_black_24dp"/>
+
+    <EditText
+        android:id="@+id/add_products_searchbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_toEndOf="@id/add_products_image_view" />
+
     <ListView
         android:id="@+id/add_products_grid_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/add_products_searchbar"
         android:horizontalSpacing="3dp" />
 
 </RelativeLayout>

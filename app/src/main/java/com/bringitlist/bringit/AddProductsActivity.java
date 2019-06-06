@@ -1,15 +1,14 @@
 package com.bringitlist.bringit;
 
-import android.app.Dialog;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
 
 import com.bringitlist.bringit.Database.DBNames;
@@ -19,6 +18,7 @@ import com.bringitlist.bringit.Other.IdQuantChecked;
 import com.bringitlist.bringit.Other.ProductsAdapter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AddProductsActivity extends AppCompatActivity {
 
@@ -61,15 +61,35 @@ public class AddProductsActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_prod_select_cat:
 
-                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-                View popupView = inflater.inflate(R.layout.popup_cat, null);
+                //LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                //View popupView = inflater.inflate(R.layout.popup_cat, null);
 
-                ListView listViewPopup = popupView.findViewById(R.id.popup_cat_listview);
+                //ListView listViewPopup = popupView.findViewById(R.id.popup_cat_listview);
                 CategoriesAdapter catAdapter = new CategoriesAdapter(this, items);
-                listViewPopup.setAdapter(catAdapter);
+                //listViewPopup.setAdapter(catAdapter);
 
-                Dialog dialog = new Dialog(this);
-                dialog.setContentView(popupView);
+                Log.i("Cats", "Antes: " + Arrays.toString(items));
+
+                AlertDialog dialog = new AlertDialog.Builder(this).setAdapter(catAdapter, null).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        ArrayList<Integer> ids = new ArrayList<>();
+                        for (IdAndChecked item : items) {
+                            if (item.checked) ids.add(item.id);
+                        }
+
+                        if (ids.size() == 0) {
+                            adapter = new ProductsAdapter(AddProductsActivity.this, null);
+                        } else {
+                            Integer[] idsArray = ids.toArray(new Integer[0]);
+                            adapter = new ProductsAdapter(AddProductsActivity.this, idsArray);
+                        }
+                        listView.setAdapter(adapter);
+
+                        Log.i("Cats", "Depois: " + Arrays.toString(items));
+                    }
+                }).create();
+                /*dialog.setContentView(popupView);
                 dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
@@ -85,9 +105,8 @@ public class AddProductsActivity extends AppCompatActivity {
                             adapter = new ProductsAdapter(AddProductsActivity.this, idsArray);
                         }
                         listView.setAdapter(adapter);
-                        adapter.notifyDataSetChanged();
                     }
-                });
+                });*/
                 dialog.show();
 
                 return true;

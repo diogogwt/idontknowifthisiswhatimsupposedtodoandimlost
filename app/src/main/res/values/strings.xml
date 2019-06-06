@@ -21,4 +21,7 @@
     <string name="passwords_not_match">Passwords do not match</string>
     <string name="username_taken">Username taken</string>
     <string name="incorrect_password">Incorrect password</string>
+    <string name="product_name">Product Name</string>
+    <string name="price">Price</string>
+    <string name="amount">Amount</string>
 </resources>

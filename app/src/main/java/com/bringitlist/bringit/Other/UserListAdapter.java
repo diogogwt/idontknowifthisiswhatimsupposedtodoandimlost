@@ -3,6 +3,7 @@ package com.bringitlist.bringit.Other;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import com.bringitlist.bringit.App;
 import com.bringitlist.bringit.Database.DBNames;
 import com.bringitlist.bringit.Database.DatabaseOpen;
+import com.bringitlist.bringit.NewEditProductActivity;
 import com.bringitlist.bringit.R;
 
 import java.util.ArrayList;
@@ -109,6 +111,14 @@ public class UserListAdapter extends BaseAdapter {
                         .create();
                 dialog.show();
                 return true;
+            }
+        });
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, NewEditProductActivity.class);
+                intent.putExtra("prod_id", items.get(position).id);
+                context.startActivity(intent);
             }
         });
         checkBox.setOnClickListener(new View.OnClickListener() {
