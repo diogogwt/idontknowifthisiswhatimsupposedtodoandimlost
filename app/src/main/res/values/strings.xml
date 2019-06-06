@@ -24,4 +24,7 @@
     <string name="product_name">Product Name</string>
     <string name="price">Price</string>
     <string name="amount">Amount</string>
+    <string name="remove_from_cart">Do you really want to remove this product from the cart?</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
 </resources>

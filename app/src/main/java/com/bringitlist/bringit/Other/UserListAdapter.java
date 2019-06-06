@@ -60,7 +60,6 @@ public class UserListAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        Log.i(TAG, "getView: Start");
         String[] selectionArgs = new String[]{String.valueOf(getItemId(position))};
         Cursor cursor = db.query(DBNames.PRODUCTS, new String[]{"name", "image"}, "id=?", selectionArgs, null, null, null);
         if (!cursor.moveToFirst()) {
@@ -81,15 +80,10 @@ public class UserListAdapter extends BaseAdapter {
 
         quantView.setText(String.valueOf(items.get(position).amount));
         nameView.setText(cursor.getString(0));
-        try {
-            Log.i(TAG, "getView: Start Image");
-            String fileName = cursor.getString(1);
-            Bitmap bitmap = BitmapFactory.decodeStream(context.getResources().getAssets().open(fileName));
-            imageView.setImageBitmap(bitmap);
-            Log.i(TAG, "getView: Bitmap Set");
-        } catch (Exception e) {
-            Log.e("BIG OPPSIE", "putting image on grid element: ", e);
-        }
+
+        String fileName = cursor.getString(1);
+        App.loadImageToView(context, fileName, imageView);
+
         cursor.close();
 
         /**---------------------------------Listeners------------------------------------*/
@@ -99,7 +93,7 @@ public class UserListAdapter extends BaseAdapter {
             @Override
             public boolean onLongClick(View v) {
                 AlertDialog dialog = new AlertDialog.Builder(context)
-                        .setTitle("Tens a certeza que desejas remover da lista?")
+                        .setTitle(context.getString(R.string.remove_from_cart))
                         .setNegativeButton("Não", null)
                         .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
@@ -173,8 +167,6 @@ public class UserListAdapter extends BaseAdapter {
                 }
             }
         });
-
-        Log.i(TAG, "getView: End");
         return convertView;
     }
 }

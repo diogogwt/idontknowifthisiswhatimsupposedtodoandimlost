@@ -1,7 +1,7 @@
 package com.bringitlist.bringit.Other;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -18,33 +18,34 @@ import android.widget.TextView;
 
 import com.bringitlist.bringit.App;
 import com.bringitlist.bringit.Database.DBNames;
+import com.bringitlist.bringit.NewEditProductActivity;
 import com.bringitlist.bringit.R;
-
-import java.util.Arrays;
 
 public class ProductsAdapter extends BaseAdapter {
 
     private static String TAG = "ProductsAdapter";
 
-    private Context context;
+    public Context context;
     private App app;
     private SQLiteDatabase db;
     public IdAndChecked[] ids;
+    public Integer[] where;
 
     //para selecionar categorias receber um array com os ids ou nomes
     public ProductsAdapter(Context context, Integer[] where) {
         this.context = context;
         this.app = (App) context.getApplicationContext();
         this.db = app.getReadableDB();
+        this.where = where;
 
         Cursor cursor = null;
 
         if (where == null) {
-            cursor = db.rawQuery("select id from " + DBNames.PRODUCTS + " order by cat_id,name;", null);
+            cursor = db.rawQuery("select id from products order by cat_id,name;", null);
 
         } else {
             String whereString = TextUtils.join(",", where);
-            cursor = db.rawQuery("select id from " + DBNames.PRODUCTS + " where cat_id in (" + whereString + ") order by cat_id,name;", null);
+            cursor = db.rawQuery("select id from products where cat_id in (" + whereString + ") order by cat_id,name;", null);
         }
 
         ids = new IdAndChecked[cursor.getCount()];
@@ -55,7 +56,11 @@ public class ProductsAdapter extends BaseAdapter {
             ids[i].checked = false;
         }
         cursor.close();
+    }
 
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
     }
 
     @Override
@@ -91,13 +96,10 @@ public class ProductsAdapter extends BaseAdapter {
         CheckBox checkBox = convertView.findViewById(R.id.product_checkbox_right);
 
         nameView.setText(cursor.getString(0));
-        try {
-            String fileName = cursor.getString(1);
-            Bitmap bitmap = BitmapFactory.decodeStream(context.getResources().getAssets().open(fileName));
-            imageView.setImageBitmap(bitmap);
-        } catch (Exception e) {
-            Log.e("BIG OPPSIE", "putting image on grid element: ", e);
-        }
+
+        String fileName = cursor.getString(1);
+        App.loadImageToView(context, fileName, imageView);
+
         cursor.close();
 
         checkBox.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +108,14 @@ public class ProductsAdapter extends BaseAdapter {
                 ids[position].reverse();
             }
         });
-
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, NewEditProductActivity.class);
+                intent.putExtra("prod_id", ids[position].id);
+                context.startActivity(intent);
+            }
+        });
 
         return convertView;
     }

@@ -27,7 +27,7 @@ public class DBNames {
                     "cat_id integer not null," +
                     "name text not null," +
                     "price real not null," +
-                    "image text not null," +
+                    "image text," +
                     "foreign key(cat_id) references " + CATEGORIES + "(id)" +
                     ")";
 

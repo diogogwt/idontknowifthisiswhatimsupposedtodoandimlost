@@ -74,7 +74,7 @@ public class CartActivity extends AppCompatActivity {
         }
         //app.printSelect("select * from users", null);
         //app.printSelect("select * from carts", null);
-        //app.printSelect("select * from products", null);
+        app.printSelect("select * from products", null);
         //app.printSelect("select * from history", null);
         //app.printSelect("select * from categories", null);
     }
@@ -88,10 +88,6 @@ public class CartActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings: {
-
-                break;
-            }
             case R.id.history: {
                 Intent intent = new Intent(this, HistoryActivity.class);
                 startActivity(intent);

@@ -13,4 +13,16 @@
     <string name="password_constraints">Password precisa de ter mais de 6 caracteres</string>
     <string name="incorrect_username">Nome de utilizador incorreto</string>
     <string name="logout">Sair da conta</string>
+    <string name="confirm_password">Confirmar palavra passe</string>
+    <string name="username_too_short">Nome de utilizador demasiado curto</string>
+    <string name="password_too_short">Palavra passe demasiada curta</string>
+    <string name="passwords_not_match">Palavras passes estão diferentes</string>
+    <string name="username_taken">Nome de utilizador já utilizado</string>
+    <string name="incorrect_password">Palavra passe incorreta</string>
+    <string name="product_name">Nome do produto</string>
+    <string name="price">Preço</string>
+    <string name="amount">Quantidade</string>
+    <string name="remove_from_cart">Tens a certeza que queres remover o produto do carrinho?</string>
+    <string name="save">Guardar</string>
+    <string name="delete">Apagar</string>
 </resources>

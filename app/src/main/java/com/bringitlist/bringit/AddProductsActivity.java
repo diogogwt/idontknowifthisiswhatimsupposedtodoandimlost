@@ -2,13 +2,16 @@ package com.bringitlist.bringit;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
 import com.bringitlist.bringit.Database.DBNames;
@@ -18,7 +21,6 @@ import com.bringitlist.bringit.Other.IdQuantChecked;
 import com.bringitlist.bringit.Other.ProductsAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class AddProductsActivity extends AppCompatActivity {
 
@@ -33,9 +35,7 @@ public class AddProductsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_products);
 
         app = (App) getApplicationContext();
-        adapter = new ProductsAdapter(this, null);
         listView = findViewById(R.id.add_products_grid_view);
-        listView.setAdapter(adapter);
 
 
         SQLiteDatabase db = app.getReadableDB();
@@ -48,6 +48,29 @@ public class AddProductsActivity extends AppCompatActivity {
             items[i].id = cursor.getInt(0);
         }
         cursor.close();
+
+        FloatingActionButton fab = findViewById(R.id.add_prod_main);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), NewEditProductActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //TODO : fix the products not updating after changing product category
+
+        Integer[] where = null;
+        if (adapter != null)
+            where = adapter.where;
+
+        Log.i("test man", "onStart: " + where);
+        adapter = new ProductsAdapter(this, where);
+        listView.setAdapter(adapter);
     }
 
     @Override
@@ -60,17 +83,9 @@ public class AddProductsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_prod_select_cat:
-
-                //LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-                //View popupView = inflater.inflate(R.layout.popup_cat, null);
-
-                //ListView listViewPopup = popupView.findViewById(R.id.popup_cat_listview);
                 CategoriesAdapter catAdapter = new CategoriesAdapter(this, items);
-                //listViewPopup.setAdapter(catAdapter);
 
-                Log.i("Cats", "Antes: " + Arrays.toString(items));
-
-                AlertDialog dialog = new AlertDialog.Builder(this).setAdapter(catAdapter, null).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                new AlertDialog.Builder(this).setAdapter(catAdapter, null).setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         ArrayList<Integer> ids = new ArrayList<>();
@@ -85,29 +100,8 @@ public class AddProductsActivity extends AppCompatActivity {
                             adapter = new ProductsAdapter(AddProductsActivity.this, idsArray);
                         }
                         listView.setAdapter(adapter);
-
-                        Log.i("Cats", "Depois: " + Arrays.toString(items));
                     }
-                }).create();
-                /*dialog.setContentView(popupView);
-                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-
-                        ArrayList<Integer> ids = new ArrayList<>();
-                        for (IdAndChecked idAndChecked : items)
-                            if (idAndChecked.checked) ids.add(idAndChecked.id);
-
-                        if (ids.size() == 0) {
-                            adapter = new ProductsAdapter(AddProductsActivity.this, null);
-                        } else {
-                            Integer[] idsArray = ids.toArray(new Integer[0]);
-                            adapter = new ProductsAdapter(AddProductsActivity.this, idsArray);
-                        }
-                        listView.setAdapter(adapter);
-                    }
-                });*/
-                dialog.show();
+                }).create().show();
 
                 return true;
         }

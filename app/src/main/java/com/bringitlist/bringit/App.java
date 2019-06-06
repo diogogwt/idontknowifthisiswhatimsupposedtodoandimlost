@@ -1,19 +1,31 @@
 package com.bringitlist.bringit;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bringitlist.bringit.Database.DBNames;
 import com.bringitlist.bringit.Database.DatabaseOpen;
 import com.bringitlist.bringit.Other.IdQuantChecked;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -111,6 +123,7 @@ public class App extends Application {
         Log.i("Cursor Result", strBuilder.toString());
     }
 
+
     public boolean isFirstOpening() {
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences("random", MODE_PRIVATE);
@@ -148,9 +161,18 @@ public class App extends Application {
                     String[] allValues = new String[splittedLine.length + 1];
                     allValues[0] = "" + i;
                     System.arraycopy(splittedLine, 0, allValues, 1, splittedLine.length);
-                    allValues[allValues.length - 1] = "prod_img/" + allValues[allValues.length - 1];
 
-                    Log.i(TAG, Arrays.toString(allValues));
+                    String internalFilePath = allValues[allValues.length - 1];
+                    try {
+                        BufferedOutputStream out = new BufferedOutputStream(openFileOutput(internalFilePath, MODE_PRIVATE));
+                        BufferedInputStream in = new BufferedInputStream(getAssets().open("prod_img/" + internalFilePath));
+                        byte[] buf = new byte[65533];
+                        int len;
+                        while ((len = in.read(buf)) > 0)
+                            out.write(buf, 0, len);
+                    } catch (Exception e) {
+                        Log.e(TAG, "DoOnFirstOpening: ", e);
+                    }
 
                     db.execSQL(DBNames.INSERT_PRODUCT, allValues);
                 }
@@ -159,6 +181,7 @@ public class App extends Application {
             }
         }
     }
+
 
     public static String hash(String input) {
         try {
@@ -171,42 +194,17 @@ public class App extends Application {
         }
     }
 
-    /*public static String hash(String input) {
-    try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] messageDigest = md.digest(input.getBytes());
-
-            BigInteger no = new BigInteger(1, messageDigest);
-            String hashtext = no.toString(16);
-
-            while (hashtext.length() < 32) {
-                hashtext = "0" + hashtext;
-            }
-            return hashtext;
-        }
-        catch (NoSuchAlgorithmException e) {
-            System.out.println("Exception thrown for incorrect algorithm: " + e);
-            return null;
-        }
-    }*/
-
-    /*public void SaveAll() {
+    public static void loadImageToView(Context context, String filename, ImageView imageView) {
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(openFileOutput("user_list", MODE_PRIVATE));
-            oos.writeObject(userItems);
-            oos.close();
-        } catch (IOException e) {
-            Log.e("Error", "Save user list: ", e);
+            if (filename != null) {
+                Bitmap bitmap = BitmapFactory.decodeStream(context.openFileInput(filename));
+                imageView.setImageBitmap(bitmap);
+            } else {
+                imageView.setImageBitmap(null);
+            }
+
+        } catch (Exception e) {
+            Log.e("BIG OPPSIE", "putting image on grid element: ", e);
         }
     }
-
-    public void RetrieveAll() {
-        try {
-            ObjectInputStream oos = new ObjectInputStream(openFileInput("user_list"));
-            userItems = (ArrayList<IdQuantChecked>) oos.readObject();
-            oos.close();
-        } catch (Exception ex) {
-            userItems = new ArrayList<>();
-        }
-    }*/
 }
