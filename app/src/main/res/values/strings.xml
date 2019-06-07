@@ -27,4 +27,5 @@
     <string name="remove_from_cart">Do you really want to remove this product from the cart?</string>
     <string name="save">Save</string>
     <string name="delete">Delete</string>
+    <string name="insert_prod_name">Insert product name</string>
 </resources>
