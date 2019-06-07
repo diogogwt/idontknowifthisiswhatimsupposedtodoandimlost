@@ -70,7 +70,7 @@ public class HistoryActivity extends AppCompatActivity {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
                 String year = sdf.format(calendar.getTime());
 
-                String query = "select sum(price) as total from history,products where products.id=history.prod_id and date>=Datetime('" + year + "-01-01 00:00:00');";
+                String query = "select sum(price*amount) as total from history,products where products.id=history.prod_id and date>=Datetime('" + year + "-01-01 00:00:00');";
 
                 String toastText = "Total Anual: ";
                 Cursor cursor = app.getReadableDB().rawQuery(query, null);
