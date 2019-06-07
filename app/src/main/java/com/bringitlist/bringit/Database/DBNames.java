@@ -35,11 +35,11 @@ public class DBNames {
             "create table " + HISTORY + " (" +
                     "id integer primary key AUTOINCREMENT," +
                     "user_id integer," +
-                    "prod_id integer not null," +
+                    "prod_name text not null," +
+                    "prod_price integer not null," +
                     "amount integer not null," +
                     "date text DEFAULT CURRENT_TIMESTAMP," +
-                    "foreign key(user_id) references " + USERS + "(id)," +
-                    "foreign key(prod_id) references " + PRODUCTS + "(id)" +
+                    "foreign key(user_id) references " + USERS + "(id)" +
                     ")";
 
     static final String CREATE_TABLE_CARTS =
@@ -54,7 +54,8 @@ public class DBNames {
 
     public static final String INSERT_CATEGORY = "insert into " + CATEGORIES + " values(?,?);";
     public static final String INSERT_PRODUCT = "insert into " + PRODUCTS + " values(?,?,?,?,?);";
-    public static final String INSERT_HISTORY = "insert into " + HISTORY + "(user_id,prod_id,amount) values(?,?,?);";
+    public static final String INSERT_HISTORY = "insert into " + HISTORY + "(user_id,amount,prod_name,prod_price) "
+            + "select ?,?,name,price from products where id=?;";
     public static final String INSERT_USER = "insert into " + USERS + "(username,password_hash) values(?,?);";
     public static final String INSERT_CART_ITEM = "insert into " + CARTS + "(user_id,prod_id,amount) values(?,?,?);";
 }

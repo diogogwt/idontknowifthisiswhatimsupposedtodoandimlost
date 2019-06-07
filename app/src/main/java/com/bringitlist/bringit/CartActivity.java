@@ -26,7 +26,7 @@ public class CartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_cart);
 
         app = (App) getApplication();
         app.fillUserItems();
@@ -50,7 +50,7 @@ public class CartActivity extends AppCompatActivity {
                     if (item.checked) {
                         app.userItems.remove(item);
 
-                        db.execSQL(DBNames.INSERT_HISTORY, new Integer[]{app.loggedUser, item.id, item.amount});
+                        db.execSQL(DBNames.INSERT_HISTORY, new Integer[]{app.loggedUser, item.amount, item.id});
                     }
                 }
                 listAdapter.notifyDataSetChanged();
@@ -61,21 +61,21 @@ public class CartActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.main_grid_view);
         listView.setAdapter(listAdapter);
-        Log.i("Cart", "onCreate: Done");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        listAdapter.notifyDataSetChanged();
 
         for (IdQuantChecked item : listAdapter.items) {
             item.checked = false;
         }
+        listAdapter = new UserListAdapter(this);
+        listView.setAdapter(listAdapter);
         //app.printSelect("select * from users", null);
         //app.printSelect("select * from carts", null);
-        app.printSelect("select * from products", null);
-        //app.printSelect("select * from history", null);
+        //app.printSelect("select * from products", null);
+        app.printSelect("select * from history", null);
         //app.printSelect("select * from categories", null);
     }
 

@@ -28,4 +28,5 @@
     <string name="save">Save</string>
     <string name="delete">Delete</string>
     <string name="insert_prod_name">Insert product name</string>
+    <string name="this_week_total">This Week Total</string>
 </resources>

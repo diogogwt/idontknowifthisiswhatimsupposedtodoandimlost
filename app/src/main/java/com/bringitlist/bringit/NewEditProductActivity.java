@@ -144,7 +144,7 @@ public class NewEditProductActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             try {
                 Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                bitmap = Bitmap.createScaledBitmap(bitmap, 400, 400, false);
+                bitmap = Bitmap.createScaledBitmap(bitmap, 300, 300, false);
                 imageName = prod_id + ".jpg";
 
                 FileOutputStream outputStream = openFileOutput(imageName, MODE_PRIVATE);

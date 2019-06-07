@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.strictmode.SqliteObjectLeakedViolation;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -38,7 +39,7 @@ public class HistoryActivity extends AppCompatActivity {
         SQLiteDatabase db = app.getReadableDB();
 
         String[] args = new String[]{String.valueOf(app.loggedUser)};
-        Cursor cursor = db.rawQuery("select products.name,date,amount,(amount*price) as price from history,products where history.user_id=? and products.id=history.prod_id;", args);
+        Cursor cursor = db.rawQuery("select prod_name,date,amount,(amount*prod_price) as price from history where history.user_id=?;", args);
         while (cursor.moveToNext()) {
             HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("name", cursor.getString(0));
@@ -64,7 +65,25 @@ public class HistoryActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_history_total_anual:
+            case R.id.menu_history_total_semanal: {
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.WEEK_OF_YEAR, -1);
+                calendar.set(Calendar.DAY_OF_WEEK, 1);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String date = sdf.format(calendar.getTime());
+                Log.i("test", "onOptionsItemSelected: " + date);
+                String query = "select sum(price*amount) as total from history,products where products.id=history.prod_id and date>=Datetime('" + date + " 00:00:00');";
+
+                String toastText = getString(R.string.this_week_total) + " : ";
+                Cursor cursor = app.getReadableDB().rawQuery(query, null);
+                if (cursor.moveToFirst()) {
+                    toastText += cursor.getString(0);
+                }
+                cursor.close();
+                Toast.makeText(this, toastText, Toast.LENGTH_LONG).show();
+                break;
+            }
+            case R.id.menu_history_total_anual: {
                 Calendar calendar = Calendar.getInstance();
                 calendar.add(Calendar.YEAR, -1);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
@@ -72,14 +91,15 @@ public class HistoryActivity extends AppCompatActivity {
 
                 String query = "select sum(price*amount) as total from history,products where products.id=history.prod_id and date>=Datetime('" + year + "-01-01 00:00:00');";
 
-                String toastText = "Total Anual: ";
+                String toastText = getString(R.string.this_years_total) + " : ";
                 Cursor cursor = app.getReadableDB().rawQuery(query, null);
                 if (cursor.moveToFirst()) {
-                    toastText += cursor.getString(0) + "€";
+                    toastText += cursor.getString(0);
                 }
                 cursor.close();
                 Toast.makeText(this, toastText, Toast.LENGTH_LONG).show();
                 break;
+            }
             default:
                 break;
         }

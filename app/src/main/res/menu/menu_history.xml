@@ -4,4 +4,7 @@
     <item
         android:id="@+id/menu_history_total_anual"
         android:title="@string/this_years_total" />
+    <item
+        android:id="@+id/menu_history_total_semanal"
+        android:title="@string/this_week_total" />
 </menu>

@@ -87,7 +87,6 @@ public class UserListAdapter extends BaseAdapter {
         cursor.close();
 
         /**---------------------------------Listeners------------------------------------*/
-        final View view = convertView;
 
         convertView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
