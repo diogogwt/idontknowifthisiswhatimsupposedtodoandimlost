@@ -14,7 +14,7 @@
         android:layout_marginTop="60dp"
         android:layout_marginEnd="32dp"
         android:text="@string/login"
-        android:textSize="32sp"/>
+        android:textSize="32sp" />
 
     <EditText
         android:id="@+id/login_username"
@@ -43,8 +43,10 @@
         android:layout_marginStart="64dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="64dp"
+        android:background="@color/colorNiceBlue"
         android:onClick="onClickLogin"
-        android:text="@string/login" />
+        android:text="@string/login"
+        android:textColor="@android:color/white" />
 
     <Button
         android:id="@+id/button2"
@@ -53,7 +55,9 @@
         android:layout_marginStart="64dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="64dp"
+        android:background="@color/colorNiceBlue"
         android:onClick="onClickRegister"
-        android:text="@string/register" />
+        android:text="@string/register"
+        android:textColor="@android:color/white" />
 
 </LinearLayout>

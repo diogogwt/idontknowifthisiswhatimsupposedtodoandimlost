@@ -1,4 +1,21 @@
-1;CocaCola;1.23;cocacola.jpg
-1;Pepsi;0.95;isded.jpg
-1;Ice Tea Limão;1.80;lipton.jpg
-1;Fanta;1.69;fanta.jpg
+2;CocaCola;1;cocacola.jpg
+2;Pepsi;0.90;isded.jpg
+2;Ice Tea Limão;0.80;lipton.jpg
+2;Fanta;0.95;fanta.jpg
+3;Carne Picada;4;carne_picada.jpg
+3;Frango;2;chicken.jpg
+4;Salmão;5;salmon.jpg
+4;Sardinha;5;sardinha.jpg
+4;Carapau;3.5;carapau.jpg
+4;Filetes de pescada;4;filetes_pescada.jpg
+5;Esparguete;0.70;spaghetti.jpg
+5;Massa cotovelos;0.75;cotovelos.jpg
+6;Produto limpeza;1.2;clorox.jpg
+6;Esponja louça;0.55;plate_sponge.jpg
+7;Vitaminas;3;vitamins.jpg
+7;Suplementos;2;supplements.jpg
+8;Maçã;2;apple.jpg
+8;Kiwi;2;kiwi.jpg
+8;Pêra;2;pear.jpg
+8;Pêssego;2;fanta.jpg
+8;Cereja;2;cereja.jpg

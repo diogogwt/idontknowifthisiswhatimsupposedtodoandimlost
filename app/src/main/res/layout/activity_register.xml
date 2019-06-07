@@ -53,6 +53,8 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="64dp"
         android:onClick="onClickRegisterR"
+        android:background="#007bff"
+        android:textColor="@android:color/white"
         android:text="@string/register" />
 
 </LinearLayout>

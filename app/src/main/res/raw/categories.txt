@@ -1,3 +1,8 @@
-1;bebida
-2;carne
-3;peixe
+1;Sem categoria
+2;Bebida
+3;Carne
+4;Peixe
+5;Massas
+6;Higiene
+7;Saúde
+8;Frutas
