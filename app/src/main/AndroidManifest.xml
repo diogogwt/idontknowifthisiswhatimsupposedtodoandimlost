@@ -22,6 +22,7 @@
         <activity android:name=".HistoryActivity" />
         <activity
             android:name=".AddProductsActivity"
+            android:hardwareAccelerated="true"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".CartActivity" />
         <activity

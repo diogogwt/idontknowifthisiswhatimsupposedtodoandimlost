@@ -199,6 +199,7 @@ public class App extends Application {
             if (filename != null) {
                 Bitmap bitmap = BitmapFactory.decodeStream(context.openFileInput(filename));
                 imageView.setImageBitmap(bitmap);
+
             } else {
                 imageView.setImageBitmap(null);
             }

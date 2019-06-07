@@ -72,7 +72,7 @@ public class HistoryActivity extends AppCompatActivity {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String date = sdf.format(calendar.getTime());
                 Log.i("test", "onOptionsItemSelected: " + date);
-                String query = "select sum(price*amount) as total from history,products where products.id=history.prod_id and date>=Datetime('" + date + " 00:00:00');";
+                String query = "select sum(prod_price*amount) as total from history where date>=Datetime('" + date + " 00:00:00');";
 
                 String toastText = getString(R.string.this_week_total) + " : ";
                 Cursor cursor = app.getReadableDB().rawQuery(query, null);
@@ -89,7 +89,7 @@ public class HistoryActivity extends AppCompatActivity {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
                 String year = sdf.format(calendar.getTime());
 
-                String query = "select sum(price*amount) as total from history,products where products.id=history.prod_id and date>=Datetime('" + year + "-01-01 00:00:00');";
+                String query = "select sum(prod_price*amount) as total from history where date>=Datetime('" + year + "-01-01 00:00:00');";
 
                 String toastText = getString(R.string.this_years_total) + " : ";
                 Cursor cursor = app.getReadableDB().rawQuery(query, null);

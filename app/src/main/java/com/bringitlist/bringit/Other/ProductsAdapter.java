@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,100 +24,116 @@ import com.bringitlist.bringit.R;
 
 public class ProductsAdapter extends BaseAdapter {
 
-    private static String TAG = "ProductsAdapter";
+	private static String TAG = "ProductsAdapter";
 
-    public Context context;
-    private App app;
-    private SQLiteDatabase db;
-    public IdAndChecked[] ids;
-    public Integer[] where;
+	private final String like;
+	public Context context;
+	private App app;
+	private SQLiteDatabase db;
+	public IdAndChecked[] ids;
+	public Integer[] where;
 
-    //para selecionar categorias receber um array com os ids ou nomes
-    public ProductsAdapter(Context context, Integer[] where) {
-        this.context = context;
-        this.app = (App) context.getApplicationContext();
-        this.db = app.getReadableDB();
-        this.where = where;
+	//para selecionar categorias receber um array com os ids ou nomes
+	public ProductsAdapter(Context context, Integer[] where, String like) {
+		this.context = context;
+		this.app = (App) context.getApplicationContext();
+		this.db = app.getReadableDB();
+		this.where = where;
+		this.like = like;
 
-        Cursor cursor = null;
+		updateFromDatabase();
+	}
 
-        if (where == null) {
-            cursor = db.rawQuery("select id from products order by cat_id,name;", null);
 
-        } else {
-            String whereString = TextUtils.join(",", where);
-            cursor = db.rawQuery("select id from products where cat_id in (" + whereString + ") order by cat_id,name;", null);
-        }
+	private void updateFromDatabase() {
+		Cursor cursor;
+		String likeString = "";
+		if (like != null) {
+			likeString = "%" + like + "%";
+		}
 
-        ids = new IdAndChecked[cursor.getCount()];
+		if (where == null) {
+			if (like == null)
+				cursor = db.rawQuery("select id from products order by cat_id,name;", null);
+			else
+				cursor = db.rawQuery("select id from products where name like ? order by cat_id,name;", new String[]{likeString});
+		} else {
+			String whereString = TextUtils.join(",", where);
+			if (like == null)
+				cursor = db.rawQuery("select id from products where cat_id in (" + whereString + ") order by cat_id,name;", null);
+			else
+				cursor = db.rawQuery("select id from products where cat_id in (" + whereString + ") and name like ? order by cat_id,name;", new String[]{likeString});
+		}
 
-        for (int i = 0; cursor.moveToNext(); i++) {
-            ids[i] = new IdAndChecked();
-            ids[i].id = cursor.getInt(0);
-            ids[i].checked = false;
-        }
-        cursor.close();
-    }
+		ids = new IdAndChecked[cursor.getCount()];
 
-    @Override
-    public void notifyDataSetChanged() {
-        super.notifyDataSetChanged();
-    }
+		for (int i = 0; cursor.moveToNext(); i++) {
+			ids[i] = new IdAndChecked();
+			ids[i].id = cursor.getInt(0);
+			ids[i].checked = false;
+		}
+		cursor.close();
+	}
 
-    @Override
-    public int getCount() {
-        return ids.length;
-    }
+	@Override public void notifyDataSetChanged() {
+		updateFromDatabase();
+		super.notifyDataSetChanged();
+	}
 
-    @Override
-    public Object getItem(int position) {
-        return null;
-    }
+	@Override
+	public int getCount() {
+		return ids.length;
+	}
 
-    @Override
-    public long getItemId(int position) {
-        return ids[position].id;
-    }
+	@Override
+	public Object getItem(int position) {
+		return null;
+	}
 
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+	@Override
+	public long getItemId(int position) {
+		return ids[position].id;
+	}
 
-        String[] selectionArgs = {String.valueOf(getItemId(position))};
-        Cursor cursor = db.query(DBNames.PRODUCTS, new String[]{"name", "image"}, "id=?", selectionArgs, null, null, null);
-        //Cursor cursor = db.rawQuery("select name,image from products where id=?",selectionArgs);
-        cursor.moveToFirst();
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		String id = String.valueOf(ids[position].id);
+		final IdAndChecked elem = ids[position];
 
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.product_layout, parent, false);
-        }
+		Cursor cursor = db.query(DBNames.PRODUCTS, new String[]{"name", "image"}, "id=?", new String[]{id}, null, null, null);
+		//Cursor cursor = db.rawQuery("select name,image from products where id=?",selectionArgs);
+		cursor.moveToFirst();
 
-        TextView nameView = convertView.findViewById(R.id.product_name);
-        ImageView imageView = convertView.findViewById(R.id.product_image);
-        CheckBox checkBox = convertView.findViewById(R.id.product_checkbox_right);
+		if (convertView == null) {
+			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			convertView = inflater.inflate(R.layout.product_layout, parent, false);
+		}
 
-        nameView.setText(cursor.getString(0));
+		TextView nameView = convertView.findViewById(R.id.product_name);
+		final ImageView imageView = convertView.findViewById(R.id.product_image);
+		CheckBox checkBox = convertView.findViewById(R.id.product_checkbox_right);
 
-        String fileName = cursor.getString(1);
-        App.loadImageToView(context, fileName, imageView);
+		nameView.setText(cursor.getString(0));
 
-        cursor.close();
+		final String fileName = cursor.getString(1);
 
-        checkBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ids[position].reverse();
-            }
-        });
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, NewEditProductActivity.class);
-                intent.putExtra("prod_id", ids[position].id);
-                context.startActivity(intent);
-            }
-        });
+		cursor.close();
 
-        return convertView;
-    }
+		checkBox.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				elem.reverse();
+			}
+		});
+		convertView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, NewEditProductActivity.class);
+				intent.putExtra("prod_id", elem.id);
+				context.startActivity(intent);
+			}
+		});
+		App.loadImageToView(context, fileName, imageView);
+		return convertView;
+	}
 }
