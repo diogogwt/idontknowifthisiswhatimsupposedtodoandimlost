@@ -27,4 +27,5 @@
     <string name="delete">Apagar</string>
     <string name="insert_prod_name">Insira o nome do produto</string>
     <string name="this_week_total">Total Semanal</string>
+    <string name="info">Informações</string>
 </resources>

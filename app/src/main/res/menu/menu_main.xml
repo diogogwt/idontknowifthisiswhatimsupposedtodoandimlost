@@ -2,10 +2,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.bringitlist.bringit.CartActivity">
+
+    <item
+        android:id="@+id/menu_main_info"
+        android:title="@string/info"
+        app:showAsAction="never" />
+
     <item
         android:id="@+id/history"
         android:title="@string/bought_history"
         app:showAsAction="never" />
+
     <item
         android:id="@+id/logout"
         android:title="@string/logout"

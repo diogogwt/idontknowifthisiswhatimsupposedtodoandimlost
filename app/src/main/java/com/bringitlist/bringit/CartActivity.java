@@ -1,5 +1,6 @@
 package com.bringitlist.bringit;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -19,93 +20,99 @@ import java.util.ArrayList;
 
 public class CartActivity extends AppCompatActivity {
 
-    private App app;
-    private ListView listView;
-    private UserListAdapter listAdapter;
+	private App app;
+	private ListView listView;
+	private UserListAdapter listAdapter;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cart);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_cart);
 
-        app = (App) getApplication();
-        app.fillUserItems();
+		app = (App) getApplication();
+		app.fillUserItems();
 
-        FloatingActionButton fab = findViewById(R.id.add_prod_main);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), AddProductsActivity.class);
-                startActivity(intent);
-            }
-        });
-        fab = findViewById(R.id.cart_prod_main);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SQLiteDatabase db = app.getWritableDB();
-                ArrayList<IdQuantChecked> temp = (ArrayList<IdQuantChecked>) app.userItems.clone();
+		FloatingActionButton fab = findViewById(R.id.add_prod_main);
+		fab.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(getApplicationContext(), AddProductsActivity.class);
+				startActivity(intent);
+			}
+		});
+		fab = findViewById(R.id.cart_prod_main);
+		fab.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				SQLiteDatabase db = app.getWritableDB();
+				ArrayList<IdQuantChecked> temp = (ArrayList<IdQuantChecked>) app.userItems.clone();
 
-                for (IdQuantChecked item : temp) {
-                    if (item.checked) {
-                        app.userItems.remove(item);
+				for (IdQuantChecked item : temp) {
+					if (item.checked) {
+						app.userItems.remove(item);
 
-                        db.execSQL(DBNames.INSERT_HISTORY, new Integer[]{app.loggedUser, item.amount, item.id});
-                    }
-                }
-                listAdapter.notifyDataSetChanged();
-            }
-        });
+						db.execSQL(DBNames.INSERT_HISTORY, new Integer[]{app.loggedUser, item.amount, item.id});
+					}
+				}
+				listAdapter.notifyDataSetChanged();
+			}
+		});
 
-        listAdapter = new UserListAdapter(this);
+		listAdapter = new UserListAdapter(this);
 
-        listView = findViewById(R.id.main_grid_view);
-        listView.setAdapter(listAdapter);
-    }
+		listView = findViewById(R.id.main_grid_view);
+		listView.setAdapter(listAdapter);
+	}
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+	@Override
+	protected void onStart() {
+		super.onStart();
 
-        for (IdQuantChecked item : listAdapter.items) {
-            item.checked = false;
-        }
-        listAdapter = new UserListAdapter(this);
-        listView.setAdapter(listAdapter);
-        //app.printSelect("select * from users", null);
-        //app.printSelect("select * from carts", null);
-        //app.printSelect("select * from products", null);
-        app.printSelect("select * from history", null);
-        //app.printSelect("select * from categories", null);
-    }
+		for (IdQuantChecked item : listAdapter.items) {
+			item.checked = false;
+		}
+		listAdapter = new UserListAdapter(this);
+		listView.setAdapter(listAdapter);
+		//app.printSelect("select * from users", null);
+		//app.printSelect("select * from carts", null);
+		//app.printSelect("select * from products", null);
+		//app.printSelect("select * from history", null);
+		//app.printSelect("select * from categories", null);
+	}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_main, menu);
+		return true;
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.history: {
-                Intent intent = new Intent(this, HistoryActivity.class);
-                startActivity(intent);
-                break;
-            }
-            case R.id.logout: {
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-            break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.menu_main_info: {
+				Dialog dialog = new Dialog(this);
+				dialog.setContentView(R.layout.info_popup);
+				dialog.show();
+				break;
+			}
+			case R.id.history: {
+				Intent intent = new Intent(this, HistoryActivity.class);
+				startActivity(intent);
+				break;
+			}
+			case R.id.logout: {
+				Intent intent = new Intent(this, LoginActivity.class);
+				startActivity(intent);
+				finish();
+			}
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        app.saveUserListToDatabase();
-    }
+	@Override
+	protected void onStop() {
+		super.onStop();
+		app.saveUserListToDatabase();
+	}
 }
