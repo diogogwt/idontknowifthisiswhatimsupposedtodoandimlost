@@ -1,6 +1,8 @@
 package com.bringitlist.bringit;
 
 import android.app.Dialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -80,6 +82,20 @@ public class RegisterActivity extends AppCompatActivity {
 		db.execSQL(DBNames.INSERT_USER, new String[]{username, App.hash(password)});
 		Toast.makeText(this, getString(R.string.registration_complete), Toast.LENGTH_LONG).show();
 
+
+		cursor = db.rawQuery("select id from users where username = ?", new String[]{username});
+		cursor.moveToFirst();
+		app.loggedUser = cursor.getInt(0);
+		cursor.close();
+
+		SharedPreferences.Editor editor = getSharedPreferences("default", MODE_PRIVATE).edit();
+		editor.putString("lastUsername", username);
+		editor.putInt("loggedUser", app.loggedUser);
+		editor.putBoolean("autoLogin", true);
+		editor.apply();
+
+		Intent intent = new Intent(this, CartActivity.class);
+		startActivity(intent);
 		finish();
 	}
 
