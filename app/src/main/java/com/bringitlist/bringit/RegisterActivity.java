@@ -61,8 +61,8 @@ public class RegisterActivity extends AppCompatActivity {
         cursor.close();
 
         db = app.getWritableDB();
-
         db.execSQL(DBNames.INSERT_USER, new String[]{username, App.hash(password)});
+        Toast.makeText(this,getString(R.string.registration_complete),Toast.LENGTH_LONG).show();
 
         finish();
     }

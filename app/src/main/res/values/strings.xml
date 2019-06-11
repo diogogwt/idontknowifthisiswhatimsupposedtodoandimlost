@@ -30,4 +30,5 @@
     <string name="insert_prod_name">Insert product name</string>
     <string name="this_week_total">This Week Total</string>
     <string name="info">Info</string>
+    <string name="registration_complete">Registration complete</string>
 </resources>
