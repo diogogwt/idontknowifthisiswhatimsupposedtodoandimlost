@@ -55,7 +55,7 @@ public class App extends Application {
 		while (cursor.moveToNext()) {
 			IdQuantChecked temp = new IdQuantChecked();
 			temp.id = cursor.getInt(0);
-			temp.amount = cursor.getInt(1);
+			temp.amount = cursor.getDouble(1);
 			temp.checked = false;
 
 			userItems.add(temp);
@@ -68,12 +68,12 @@ public class App extends Application {
 
 		db.execSQL("delete from carts where user_id = ?", new Integer[]{loggedUser});
 
-		Integer[] selectionArgs = new Integer[3];
-		selectionArgs[0] = loggedUser;
+		String[] selectionArgs = new String[3];
+		selectionArgs[0] = String.valueOf(loggedUser);
 
 		for (IdQuantChecked item : userItems) {
-			selectionArgs[1] = item.id;
-			selectionArgs[2] = item.amount;
+			selectionArgs[1] = String.valueOf(item.id);
+			selectionArgs[2] = String.valueOf(item.amount);
 
 			db.execSQL(DBNames.INSERT_CART_ITEM, selectionArgs);
 		}

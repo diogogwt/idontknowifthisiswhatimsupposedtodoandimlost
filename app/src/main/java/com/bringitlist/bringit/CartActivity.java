@@ -51,7 +51,7 @@ public class CartActivity extends AppCompatActivity {
 					if (item.checked) {
 						app.userItems.remove(item);
 
-						db.execSQL(DBNames.INSERT_HISTORY, new Integer[]{app.loggedUser, item.amount, item.id});
+						db.execSQL(DBNames.INSERT_HISTORY, new Object[]{app.loggedUser, item.amount, item.id});
 					}
 				}
 				listAdapter.notifyDataSetChanged();

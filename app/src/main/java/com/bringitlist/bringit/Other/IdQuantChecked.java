@@ -1,5 +1,5 @@
 package com.bringitlist.bringit.Other;
 
 public class IdQuantChecked extends IdAndChecked {
-    public int amount = 1;
+	public double amount = 1;
 }
