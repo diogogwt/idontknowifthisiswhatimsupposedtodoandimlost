@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 

@@ -4,11 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.text.TextUtils;
-import android.util.Log;
-import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,6 +108,7 @@ public class ProductsAdapter extends BaseAdapter {
 		TextView nameView = convertView.findViewById(R.id.product_name);
 		final ImageView imageView = convertView.findViewById(R.id.product_image);
 		CheckBox checkBox = convertView.findViewById(R.id.product_checkbox_right);
+		checkBox.setChecked(elem.checked);
 
 		nameView.setText(cursor.getString(0));
 

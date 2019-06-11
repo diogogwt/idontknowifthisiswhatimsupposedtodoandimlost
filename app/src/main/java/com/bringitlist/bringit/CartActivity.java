@@ -1,6 +1,5 @@
 package com.bringitlist.bringit;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -9,10 +8,8 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -56,7 +53,6 @@ public class CartActivity extends AppCompatActivity {
 				for (IdQuantChecked item : temp) {
 					if (item.checked) {
 						app.userItems.remove(item);
-
 						db.execSQL(DBNames.INSERT_HISTORY, new Object[]{app.loggedUser, item.amount, item.id});
 					}
 				}
@@ -92,11 +88,6 @@ public class CartActivity extends AppCompatActivity {
 		}
 		listAdapter = new UserListAdapter(this);
 		listView.setAdapter(listAdapter);
-		//app.printSelect("select * from users", null);
-		//app.printSelect("select * from carts", null);
-		//app.printSelect("select * from products", null);
-		//app.printSelect("select * from history", null);
-		//app.printSelect("select * from categories", null);
 	}
 
 

@@ -24,12 +24,6 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-//esta classe serve para poder ter objetos nas várias atividades
-//é criado um objeto desta classe quando a aplicação é aberta
-//para o pegarmos em qualquer atividade ou serviço faz-se:
-//App app = (App) getApplication();
-//App- nome da classe
-//app- nome da variavel
 public class App extends Application {
 
 	private static String TAG = "App";
@@ -40,11 +34,13 @@ public class App extends Application {
 	public String userName = null;
 
 	public App() {
+		readableDb = new DatabaseOpen(getApplicationContext()).getReadableDatabase();
+		writableDb = new DatabaseOpen(getApplicationContext()).getWritableDatabase();
 	}
 
 	public void fillUserItems() {
 		if (loggedUser == null) {
-			Toast.makeText(getApplicationContext(), "What the heck are you doing?", Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "What are you doing?", Toast.LENGTH_LONG).show();
 		}
 
 		SQLiteDatabase db = getReadableDB();
@@ -82,14 +78,10 @@ public class App extends Application {
 
 
 	public SQLiteDatabase getReadableDB() {
-		if (readableDb == null)
-			readableDb = new DatabaseOpen(getApplicationContext()).getReadableDatabase();
 		return readableDb;
 	}
 
 	public SQLiteDatabase getWritableDB() {
-		if (writableDb == null)
-			writableDb = new DatabaseOpen(getApplicationContext()).getWritableDatabase();
 		return writableDb;
 	}
 

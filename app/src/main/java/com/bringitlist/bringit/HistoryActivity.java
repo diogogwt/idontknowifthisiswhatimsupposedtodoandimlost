@@ -2,29 +2,21 @@ package com.bringitlist.bringit;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.strictmode.SqliteObjectLeakedViolation;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bringitlist.bringit.Other.NavigationViewListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Locale;
 
 public class HistoryActivity extends AppCompatActivity {
 
