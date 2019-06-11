@@ -34,4 +34,6 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="are_you_sure_you_want_to_remove_this_item">Are you sure you want to remove this item?</string>
+    <string name="no">No</string>
+    <string name="yes">yes</string>
 </resources>

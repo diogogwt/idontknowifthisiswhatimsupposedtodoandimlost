@@ -1,8 +1,6 @@
 package com.bringitlist.bringit.Other;
 
-import java.io.Serializable;
-
-public class IdAndChecked implements Serializable {
+public class IdAndChecked{
     public int id = -1;
     public boolean checked = false;
 

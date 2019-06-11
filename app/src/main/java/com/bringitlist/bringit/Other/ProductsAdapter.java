@@ -29,7 +29,6 @@ public class ProductsAdapter extends BaseAdapter {
 	public IdAndChecked[] ids;
 	public Integer[] where;
 
-	//para selecionar categorias receber um array com os ids ou nomes
 	public ProductsAdapter(Context context, Integer[] where, String like) {
 		this.context = context;
 		this.app = (App) context.getApplicationContext();
@@ -97,7 +96,6 @@ public class ProductsAdapter extends BaseAdapter {
 		final IdAndChecked elem = ids[position];
 
 		Cursor cursor = db.query(DBNames.PRODUCTS, new String[]{"name", "image"}, "id=?", new String[]{id}, null, null, null);
-		//Cursor cursor = db.rawQuery("select name,image from products where id=?",selectionArgs);
 		cursor.moveToFirst();
 
 		if (convertView == null) {

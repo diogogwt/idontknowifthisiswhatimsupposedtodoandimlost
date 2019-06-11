@@ -89,8 +89,8 @@ public class UserListAdapter extends BaseAdapter {
 			public boolean onLongClick(View v) {
 				AlertDialog dialog = new AlertDialog.Builder(context)
 						.setTitle(context.getString(R.string.remove_from_cart))
-						.setNegativeButton("Não", null)
-						.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+						.setNegativeButton(context.getString(R.string.no), null)
+						.setPositiveButton(context.getString(R.string.yes), new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								items.remove(position);

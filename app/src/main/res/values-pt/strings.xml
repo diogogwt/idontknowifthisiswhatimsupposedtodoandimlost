@@ -32,4 +32,6 @@
     <string name="open">Abre</string>
     <string name="close">Fecha</string>
     <string name="are_you_sure_you_want_to_remove_this_item">Tem a certeza que deseja remover este registo?</string>
+    <string name="no">Não</string>
+    <string name="yes">Sim</string>
 </resources>
