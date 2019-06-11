@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group>
+        <item
+            android:id="@+id/nav_item_info"
+            android:title="@string/info" />
+
+    </group>
+    <group>
+        <item
+            android:id="@+id/nav_item_history"
+            android:title="@string/bought_history">
+            <menu>
+                <item
+                    android:id="@+id/nav_item_week_total"
+                    android:title="@string/this_week_total" />
+                <item
+                    android:id="@+id/nav_item_year_total"
+                    android:title="@string/this_years_total" />
+            </menu>
+        </item>
+    </group>
+    <group>
+        <item
+            android:id="@+id/nav_item_logout"
+            android:title="@string/logout" />
+    </group>
+</menu>

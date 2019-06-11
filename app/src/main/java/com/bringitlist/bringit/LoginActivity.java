@@ -6,6 +6,10 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +18,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.Toolbar;
+
+import com.bringitlist.bringit.Other.NavigationViewListener;
 
 import java.io.File;
 import java.math.BigInteger;
@@ -41,8 +48,17 @@ public class LoginActivity extends AppCompatActivity {
 		passwordView = findViewById(R.id.login_password);
 
 		SharedPreferences preferences = getSharedPreferences("default", MODE_PRIVATE);
+
+		Boolean autoLogin = preferences.getBoolean("autoLogin", false);
 		String lastUsername = preferences.getString("lastUsername", "");
+		if (autoLogin) {
+			app.loggedUser = preferences.getInt("loggedUser", -1);
+			Intent intent = new Intent(this, CartActivity.class);
+			startActivity(intent);
+			finish();
+		}
 		usernameView.setText(lastUsername);
+
 	}
 
 	public void onClickLogin(View view) {
@@ -72,6 +88,8 @@ public class LoginActivity extends AppCompatActivity {
 
 				SharedPreferences.Editor editor = getSharedPreferences("default", MODE_PRIVATE).edit();
 				editor.putString("lastUsername", username);
+				editor.putInt("loggedUser", app.loggedUser);
+				editor.putBoolean("autoLogin", true);
 				editor.apply();
 				finish();
 				return;
@@ -91,13 +109,10 @@ public class LoginActivity extends AppCompatActivity {
 	}
 
 	@Override public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.menu_login_info: {
-				Dialog dialog = new Dialog(this);
-				dialog.setContentView(R.layout.info_popup);
-				dialog.show();
-				break;
-			}
+		if (item.getItemId() == R.id.menu_login_info) {
+			Dialog dialog = new Dialog(this);
+			dialog.setContentView(R.layout.info_popup);
+			dialog.show();
 		}
 		return true;
 	}

@@ -6,15 +6,16 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -22,6 +23,7 @@ import com.bringitlist.bringit.Database.DBNames;
 import com.bringitlist.bringit.Other.CategoriesAdapter;
 import com.bringitlist.bringit.Other.IdAndChecked;
 import com.bringitlist.bringit.Other.IdQuantChecked;
+import com.bringitlist.bringit.Other.NavigationViewListener;
 import com.bringitlist.bringit.Other.ProductsAdapter;
 
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ public class AddProductsActivity extends AppCompatActivity {
 	public IdAndChecked[] items;
 	private App app;
 	private String like = null;
+	private ActionBarDrawerToggle drawerToggle;
 
 	@Override protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -96,6 +99,15 @@ public class AddProductsActivity extends AppCompatActivity {
 		});
 
 
+		DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+
+		drawerLayout.addDrawerListener(drawerToggle);
+		drawerToggle.syncState();
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		NavigationView navigationView = findViewById(R.id.nav_view);
+		navigationView.setNavigationItemSelectedListener(new NavigationViewListener(this));
 	}
 
 	@Override protected void onStart() {
@@ -120,6 +132,9 @@ public class AddProductsActivity extends AppCompatActivity {
 	}
 
 	@Override public boolean onOptionsItemSelected(MenuItem item) {
+		if (drawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
 		switch (item.getItemId()) {
 			case R.id.menu_prod_select_cat:
 				CategoriesAdapter catAdapter = new CategoriesAdapter(this, items);

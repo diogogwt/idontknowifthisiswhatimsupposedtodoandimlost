@@ -31,4 +31,6 @@
     <string name="this_week_total">This Week Total</string>
     <string name="info">Info</string>
     <string name="registration_complete">Registration complete</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
 </resources>

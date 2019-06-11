@@ -29,4 +29,6 @@
     <string name="this_week_total">Total Semanal</string>
     <string name="info">Informações</string>
     <string name="registration_complete">Registo completo</string>
+    <string name="open">Abre</string>
+    <string name="close">Fecha</string>
 </resources>

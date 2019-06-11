@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.widget.ListView;
 
 import com.bringitlist.bringit.Database.DBNames;
 import com.bringitlist.bringit.Other.IdQuantChecked;
+import com.bringitlist.bringit.Other.NavigationViewListener;
 import com.bringitlist.bringit.Other.UserListAdapter;
 
 import java.util.ArrayList;
@@ -23,6 +27,7 @@ public class CartActivity extends AppCompatActivity {
 	private App app;
 	private ListView listView;
 	private UserListAdapter listAdapter;
+	private ActionBarDrawerToggle drawerToggle;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +67,16 @@ public class CartActivity extends AppCompatActivity {
 
 		listView = findViewById(R.id.main_grid_view);
 		listView.setAdapter(listAdapter);
+
+		DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+
+		drawerLayout.addDrawerListener(drawerToggle);
+		drawerToggle.syncState();
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		NavigationView navigationView = findViewById(R.id.nav_view);
+		navigationView.setNavigationItemSelectedListener(new NavigationViewListener(this));
 	}
 
 	@Override
@@ -80,32 +95,11 @@ public class CartActivity extends AppCompatActivity {
 		//app.printSelect("select * from categories", null);
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_main, menu);
-		return true;
-	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.menu_main_info: {
-				Dialog dialog = new Dialog(this);
-				dialog.setContentView(R.layout.info_popup);
-				dialog.show();
-				break;
-			}
-			case R.id.history: {
-				Intent intent = new Intent(this, HistoryActivity.class);
-				startActivity(intent);
-				break;
-			}
-			case R.id.logout: {
-				Intent intent = new Intent(this, LoginActivity.class);
-				startActivity(intent);
-				finish();
-			}
-			break;
+		if (drawerToggle.onOptionsItemSelected(item)) {
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}

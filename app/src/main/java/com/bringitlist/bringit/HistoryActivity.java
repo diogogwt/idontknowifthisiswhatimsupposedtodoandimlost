@@ -3,6 +3,9 @@ package com.bringitlist.bringit;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.strictmode.SqliteObjectLeakedViolation;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +16,8 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+
+import com.bringitlist.bringit.Other.NavigationViewListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,6 +30,7 @@ public class HistoryActivity extends AppCompatActivity {
 	private ListView listView;
 	private BaseAdapter adapter;
 	private App app;
+	private ActionBarDrawerToggle drawerToggle;
 
 
 	@Override
@@ -54,54 +60,23 @@ public class HistoryActivity extends AppCompatActivity {
 
 		adapter = new SimpleAdapter(this, arrayList, R.layout.list_history, from, to);
 		listView.setAdapter(adapter);
-	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_history, menu);
-		return true;
+
+		DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+
+		drawerLayout.addDrawerListener(drawerToggle);
+		drawerToggle.syncState();
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		NavigationView navigationView = findViewById(R.id.nav_view);
+		navigationView.setNavigationItemSelectedListener(new NavigationViewListener(this));
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.menu_history_total_semanal: {
-				Calendar calendar = Calendar.getInstance();
-				calendar.add(Calendar.WEEK_OF_YEAR, -1);
-				calendar.set(Calendar.DAY_OF_WEEK, 1);
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				String date = sdf.format(calendar.getTime());
-				Log.i("test", "onOptionsItemSelected: " + date);
-				String query = "select sum(prod_price*amount) as total from history where date>=Datetime('" + date + " 00:00:00');";
-
-				String toastText = getString(R.string.this_week_total) + " : ";
-				Cursor cursor = app.getReadableDB().rawQuery(query, null);
-				if (cursor.moveToFirst()) {
-					toastText += cursor.getString(0);
-				}
-				cursor.close();
-				Toast.makeText(this, toastText, Toast.LENGTH_LONG).show();
-				break;
-			}
-			case R.id.menu_history_total_anual: {
-				Calendar calendar = Calendar.getInstance();
-				calendar.add(Calendar.YEAR, -1);
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-				String year = sdf.format(calendar.getTime());
-
-				String query = "select sum(prod_price*amount) as total from history where date>=Datetime('" + year + "-01-01 00:00:00');";
-
-				String toastText = getString(R.string.this_years_total) + " : ";
-				Cursor cursor = app.getReadableDB().rawQuery(query, null);
-				if (cursor.moveToFirst()) {
-					toastText += cursor.getString(0);
-				}
-				cursor.close();
-				Toast.makeText(this, toastText, Toast.LENGTH_LONG).show();
-				break;
-			}
-			default:
-				break;
+		if (drawerToggle.onOptionsItemSelected(item)) {
+			return true;
 		}
 		return true;
 	}
