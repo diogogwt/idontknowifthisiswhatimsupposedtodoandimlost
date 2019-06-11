@@ -5,21 +5,17 @@
         <item
             android:id="@+id/nav_item_info"
             android:title="@string/info" />
-
     </group>
     <group>
         <item
             android:id="@+id/nav_item_history"
-            android:title="@string/bought_history">
-            <menu>
-                <item
-                    android:id="@+id/nav_item_week_total"
-                    android:title="@string/this_week_total" />
-                <item
-                    android:id="@+id/nav_item_year_total"
-                    android:title="@string/this_years_total" />
-            </menu>
-        </item>
+            android:title="@string/bought_history" />
+        <item
+            android:id="@+id/nav_item_week_total"
+            android:title="@string/this_week_total" />
+        <item
+            android:id="@+id/nav_item_year_total"
+            android:title="@string/this_years_total" />
     </group>
     <group>
         <item

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.bringitlist.bringit.Database.DBNames;
 import com.bringitlist.bringit.Other.IdQuantChecked;
@@ -77,6 +78,9 @@ public class CartActivity extends AppCompatActivity {
 
 		NavigationView navigationView = findViewById(R.id.nav_view);
 		navigationView.setNavigationItemSelectedListener(new NavigationViewListener(this));
+
+		TextView drawerUserName = navigationView.getHeaderView(0).findViewById(R.id.nav_header_textView);
+		drawerUserName.setText(app.userName);
 	}
 
 	@Override

@@ -43,7 +43,6 @@ public class NewEditProductActivity extends AppCompatActivity {
     private EditText nameView;
     private EditText priceView;
     private ImageView imageView;
-    private String curPhotoPath;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -100,20 +99,6 @@ public class NewEditProductActivity extends AppCompatActivity {
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
-        /*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException e) {
-
-                Log.e(TAG, "IOException", e);
-            }
-            if (photoFile != null) {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
-            }
-        }*/
     }
 
     @Override
@@ -127,17 +112,6 @@ public class NewEditProductActivity extends AppCompatActivity {
             }
         }
     }
-
-   /* private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-
-        curPhotoPath = "file:" + image.getAbsolutePath();
-        return image;
-    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -156,22 +130,6 @@ public class NewEditProductActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-                /*if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(curPhotoPath));
-                imageView.setImageBitmap(bitmap);
-
-                bitmap = Bitmap.createScaledBitmap(bitmap, 400, 400, false);
-
-                FileOutputStream outputStream = openFileOutput(prod_id + ".jpg", MODE_PRIVATE);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream);
-                outputStream.close();
-                imageView.setImageBitmap(bitmap);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }*/
     }
 
     public void onClickAddCategory(View view) {

@@ -52,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
 		Boolean autoLogin = preferences.getBoolean("autoLogin", false);
 		String lastUsername = preferences.getString("lastUsername", "");
 		if (autoLogin) {
+			app.userName = lastUsername;
 			app.loggedUser = preferences.getInt("loggedUser", -1);
 			Intent intent = new Intent(this, CartActivity.class);
 			startActivity(intent);

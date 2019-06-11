@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bringitlist.bringit.Other.NavigationViewListener;
@@ -71,6 +72,9 @@ public class HistoryActivity extends AppCompatActivity {
 
 		NavigationView navigationView = findViewById(R.id.nav_view);
 		navigationView.setNavigationItemSelectedListener(new NavigationViewListener(this));
+
+		TextView drawerUserName = navigationView.getHeaderView(0).findViewById(R.id.nav_header_textView);
+		drawerUserName.setText(app.userName);
 	}
 
 	@Override

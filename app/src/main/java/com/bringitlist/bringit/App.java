@@ -37,6 +37,7 @@ public class App extends Application {
 	private SQLiteDatabase readableDb = null;
 	private SQLiteDatabase writableDb = null;
 	public Integer loggedUser = null;
+	public String userName = null;
 
 	public App() {
 	}

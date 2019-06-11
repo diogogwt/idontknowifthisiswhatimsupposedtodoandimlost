@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.bringitlist.bringit.Database.DBNames;
 import com.bringitlist.bringit.Other.CategoriesAdapter;
@@ -98,7 +99,6 @@ public class AddProductsActivity extends AppCompatActivity {
 			}
 		});
 
-
 		DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
 		drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
 
@@ -108,6 +108,9 @@ public class AddProductsActivity extends AppCompatActivity {
 
 		NavigationView navigationView = findViewById(R.id.nav_view);
 		navigationView.setNavigationItemSelectedListener(new NavigationViewListener(this));
+
+		TextView drawerUserName = navigationView.getHeaderView(0).findViewById(R.id.nav_header_textView);
+		drawerUserName.setText(app.userName);
 	}
 
 	@Override protected void onStart() {
