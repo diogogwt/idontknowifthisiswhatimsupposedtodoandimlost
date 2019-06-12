@@ -34,8 +34,6 @@ public class App extends Application {
 	public String userName = null;
 
 	public App() {
-		readableDb = new DatabaseOpen(getApplicationContext()).getReadableDatabase();
-		writableDb = new DatabaseOpen(getApplicationContext()).getWritableDatabase();
 	}
 
 	public void fillUserItems() {
@@ -78,10 +76,14 @@ public class App extends Application {
 
 
 	public SQLiteDatabase getReadableDB() {
+		if (readableDb == null)
+			readableDb = new DatabaseOpen(getApplicationContext()).getReadableDatabase();
 		return readableDb;
 	}
 
 	public SQLiteDatabase getWritableDB() {
+		if (writableDb == null)
+			writableDb = new DatabaseOpen(getApplicationContext()).getWritableDatabase();
 		return writableDb;
 	}
 

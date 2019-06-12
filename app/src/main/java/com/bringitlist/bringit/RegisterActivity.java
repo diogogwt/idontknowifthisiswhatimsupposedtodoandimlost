@@ -89,6 +89,7 @@ public class RegisterActivity extends AppCompatActivity {
 		cursor.close();
 
 		SharedPreferences.Editor editor = getSharedPreferences("default", MODE_PRIVATE).edit();
+		app.userName = username;
 		editor.putString("lastUsername", username);
 		editor.putInt("loggedUser", app.loggedUser);
 		editor.putBoolean("autoLogin", true);
