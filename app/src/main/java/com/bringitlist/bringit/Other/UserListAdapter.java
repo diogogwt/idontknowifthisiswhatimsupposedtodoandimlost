@@ -76,6 +76,7 @@ public class UserListAdapter extends BaseAdapter {
 
 		quantView.setText(String.valueOf(items.get(position).amount));
 		nameView.setText(cursor.getString(0));
+		checkBox.setChecked(items.get(position).checked);
 
 		String fileName = cursor.getString(1);
 		App.loadImageToView(context, fileName, imageView);
